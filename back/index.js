@@ -51,9 +51,7 @@ app.get('/', (req, res) => {
   }
 });
 
-
 app.use("/api/auth/", auth);
-
 
 // checking the session before accessing the rooms
 app.use((req, res, next) => {
@@ -65,18 +63,25 @@ app.use((req, res, next) => {
 });
 app.use("/api/rooms/", rooms);
 
-
-
 // Start the server
 server.listen(process.env.PORT, () => {
   console.log(`Server listening on port ${process.env.PORT}`);
 });
 
+// make sure that the user is logged in before connecting to the socket
+io.use((socket, next) => {
+  console.log("socket io middleware");
+  sessionMiddleware(socket.request, {}, next);
+});
 
-// TODO: make sure that the user is logged in before connecting to the socket
-// TODO: your code here
-
-
+io.use((socket, next) => {
+  if (socket.request.session && socket.request.authenticated) {
+    next();
+  } else {
+    console.log("unauthorized");
+    next(new Error("unauthorized"));
+  }
+});
 
 io.on('connection', (socket)=>{
   console.log("user connected")
