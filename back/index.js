@@ -7,6 +7,8 @@ const session = require('express-session');
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const bodyParser = require('body-parser');
+const auth = require('./routes/auth');
+const rooms = require('./routes/rooms');
 
 const app = express(); 
 const server = http.createServer(app);
@@ -31,14 +33,13 @@ database.on('error', (error) => console.error(error));
 database.once('open', () => console.log('Connected to Database'));
 
 // Set up the session
-// TODO: your code here
+const sessionMiddleware = session({
+  resave: false, // Whether to save the session to the store on every request
+  saveUninitialized: false, // Whether to save uninitialized sessions to the store
+  secret: process.env.SESSION_SECRET,
+})
 
-
-
-
-const routes = require('./routes/auth');
-const rooms = require('./routes/rooms');
-
+app.use(sessionMiddleware);
 
 app.get('/', (req, res) => {
   if (req.session && req.session.authenticated) {
@@ -51,7 +52,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.use("/api/auth/", routes);
+app.use("/api/auth/", auth);
 
 
 // checking the session before accessing the rooms
