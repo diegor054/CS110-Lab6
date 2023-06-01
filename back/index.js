@@ -6,17 +6,18 @@ const cors  = require("cors");
 const session = require('express-session');
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const bodyParser = require( 'body-parser');
+const bodyParser = require('body-parser');
 
 const app = express(); 
 const server = http.createServer(app);
 
-
-
-// TODO: add cors to allow cross origin requests
-
-
-
+// added cors to allow cross origin requests
+const io = socketIO(server, {
+  cors: {
+    origin: '*',
+  }
+});
+app.use(cors({origin: `http://localhost:3000`, credentials:true }));
 
 dotenv.config();
 app.use(bodyParser.urlencoded({ extended: true }));
