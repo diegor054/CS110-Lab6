@@ -23,12 +23,12 @@ dotenv.config();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-
 // Connect to the database
-// TODO: your code here
+mongoose.connect(process.env.MONGO_URL);
+const database = mongoose.connection;
 
-
+database.on('error', (error) => console.error(error));
+database.once('open', () => console.log('Connected to Database'));
 
 // Set up the session
 // TODO: your code here
