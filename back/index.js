@@ -87,4 +87,9 @@ io.on('connection', (socket)=>{
   console.log("user connected")
   // TODO: write codes for the messaging functionality
   // TODO: your code here
+  // different types of callbacks in here
+  // user sends a chat message, want to get that callback here and perform some operations
+  // like user might send join and join them to a different room
+  // we have written codes like this in week 8 with multiple rooms
+  // first time user goes to a room, need to load a bunch of messages, history of that room and show it to the user (THIS IS NEW because we have DB)
 })
