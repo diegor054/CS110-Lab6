@@ -26,4 +26,6 @@ router.post('/join', (req, res) => {
 
 router.delete('/leave', (req, res) => {
     // TODO: write necassary codes to delete a room
+    // owner of that room when they want to delete it they send in this type of request
+    // want to delete room and remove room from array of rooms in each user rooms array
 });
