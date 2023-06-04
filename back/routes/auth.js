@@ -31,19 +31,20 @@ router.get('/logout', (req, res) => {
 
 // write the sign up page here
 router.post('/signup',  async (req, res)=>{
-  const {username, password} = req.body;
+  const {username, password, name} = req.body;
   const user = new User ({
       username: username,
-      password: password
+      password: password,
+      name: name
   })
-
+  console.log(user + "created")
   try{
+    console.log("heeeeeeeee")
       const dataSaved = await user.save();
       res.status(200).json(dataSaved);
   }
   catch (error){
       console.log(error);
-      res.send("ERROR!")
   }
 })
 

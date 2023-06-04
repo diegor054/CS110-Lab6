@@ -27,7 +27,7 @@ class Auth extends react.Component{
             body: JSON.stringify(data),
         }).then((res) => {
             res.json().then((data) => {
-                if (data.msg == "Logged in") {
+                if (data.msg === "Logged in") {
                     //this.setState({screen: "lobby"});
                     this.props.changeScreen("lobby");
                 }
@@ -39,8 +39,29 @@ class Auth extends react.Component{
     }
 
     register = (data) => {
-        // TODO: write codes to register
-        console.log(data);
+        fetch(this.props.server_url + '/api/auth/signup', {
+            method: "POST",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(data),
+        }).then((res) => {
+            res.json().then((data) => {
+                console.log(data.status)
+                if (data.status === 200) {
+                    //this.setState({screen: "lobby"});
+                    this.props.changeScreen("lobby");
+                    console.log("here")
+                }
+                else {
+                    console.log("failed")
+                    alert(data.msg);
+                }
+            });
+        });
     }
 
     render(){
