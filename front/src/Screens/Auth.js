@@ -53,6 +53,7 @@ class Auth extends react.Component{
                 console.log(data.status)
                 if (data.status === 200) {
                     //this.setState({screen: "lobby"});
+                    alert("Account created");
                     this.props.changeScreen("lobby");
                 }
                 else {

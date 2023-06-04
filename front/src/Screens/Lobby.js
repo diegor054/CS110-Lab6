@@ -25,7 +25,6 @@ class Lobby extends react.Component{
         });
     }
 
-
     render(){
         return(
             <div>
