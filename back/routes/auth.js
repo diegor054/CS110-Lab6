@@ -30,5 +30,21 @@ router.get('/logout', (req, res) => {
 });
 
 // write the sign up page here
+router.post('/signup',  async (req, res)=>{
+  const {username, password} = req.body;
+  const user = new User ({
+      username: username,
+      password: password
+  })
+
+  try{
+      const dataSaved = await user.save();
+      res.status(200).json(dataSaved);
+  }
+  catch (error){
+      console.log(error);
+      res.send("ERROR!")
+  }
+})
 
 // write the edit webpage function here (change profile?)
