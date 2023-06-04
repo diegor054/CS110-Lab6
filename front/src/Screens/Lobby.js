@@ -9,7 +9,7 @@ class Lobby extends react.Component{
         }
     }
 
-    componentDidMount(){
+    componentDidMount = (data) =>{
         // fetch all rooms from server
         fetch(this.props.server_url + '/api/rooms/all', {
             method: "GET",

@@ -54,7 +54,6 @@ class Auth extends react.Component{
                 if (data.status === 200) {
                     //this.setState({screen: "lobby"});
                     this.props.changeScreen("lobby");
-                    console.log("here")
                 }
                 else {
                     console.log("failed")
