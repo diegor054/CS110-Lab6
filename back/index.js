@@ -1,6 +1,6 @@
 
 const express = require("express");
-const socketIO = require('socket.io');
+const socket = require('socket.io');
 const http = require('http');
 const cors  = require("cors");
 const session = require('express-session');
@@ -14,7 +14,7 @@ const app = express();
 const server = http.createServer(app);
 
 // added cors to allow cross origin requests
-const io = socketIO(server, {
+const io = socket(server, {
   cors: {
     origin: '*',
   }
@@ -44,6 +44,7 @@ app.use(sessionMiddleware);
 app.get('/', (req, res) => {
   if (req.session && req.session.authenticated) {
     res.json({ message: "logged in" });
+    console.log("logged in")
   }
   else {  
     console.log("not logged in")
@@ -73,15 +74,18 @@ io.use((socket, next) => {
   console.log("socket io middleware");
   sessionMiddleware(socket.request, {}, next);
 });
-
+/*
+goes to else statement, need to fix/figure that out 
 io.use((socket, next) => {
   if (socket.request.session && socket.request.authenticated) {
     next();
   } else {
     console.log("unauthorized");
+    console.log(socket.request.session + socket.request.authenticated)
     next(new Error("unauthorized"));
   }
 });
+*/
 
 io.on('connection', (socket)=>{
   console.log("user connected")
