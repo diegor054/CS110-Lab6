@@ -23,12 +23,12 @@ router.post('/login', async (req, res) => {
 });
 
 // Set up a route for the logout page
-router.get('/logout', async (req, res) => {
+router.post('/logout', async (req, res) => {
     // Clear the session data and redirect to the home page
     console.log("hi)")
     req.session.destroy();
     console.log("logout")
-    res.send({msg: "Logged out", status: true})
+    res.send({msg: "logged out", status: true})
 });
 
 // write the sign up page here

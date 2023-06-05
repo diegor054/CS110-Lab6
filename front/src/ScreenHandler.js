@@ -43,15 +43,26 @@ class ScreenHandler extends react.Component{
 
 
     logout = (data) => {
-        fetch(this.props.server_url + '/api/auth/logout', {
+        console.log("in log out")
+        fetch(server_url + '/api/auth/logout', {
             method: "POST",
             mode: "cors",
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
-            }
-        })
+            },
+            
+        }).then((res) => {
+            res.json().then((data) => {
+                if (data.msg === "logged out") {
+                    this.changeScreen("auth");
+                }
+                else {
+                    alert(data.msg);
+                }
+            });
+        });
     }
 
     render(){

@@ -82,7 +82,7 @@ io.use((socket, next) => {
   } else {
     console.log("unauthorized");
     next(new Error("unauthorized"));
-  }
+  } 
 });
 
 
