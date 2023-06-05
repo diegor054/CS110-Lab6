@@ -27,7 +27,7 @@ class Auth extends react.Component{
             body: JSON.stringify(data),
         }).then((res) => {
             res.json().then((data) => {
-                if (data.msg === "Logged in") {
+                if (data.msg === "logged in") {
                     //this.setState({screen: "lobby"});
                     this.props.changeScreen("lobby");
                 }

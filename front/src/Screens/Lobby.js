@@ -6,13 +6,17 @@ import Chatroom from "./Chatroom";
 class Lobby extends react.Component{
     constructor(props){
         super(props);
-        this.socket = io('http://localhost:3001');
-        console.log("here")
+        this.socket = io('http://localhost:3001', {
+            cors: {
+            origin: 'http://localhost:3001',
+            credentials: true
+          }, transports: ['websocket']
+        });
         this.state = {
             rooms: undefined,
             username: '',
-           // room: '',
-            screen: "starting",
+            room: '',
+            screen: 'lobby',
         }
     }
 
@@ -30,6 +34,10 @@ class Lobby extends react.Component{
                 this.setState({rooms:data})
             });
         });
+    }  
+    routeToRoom(room) {
+        this.socket.emit("join", {"room":room, "username":this.state.username});
+        this.setState({room:room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
     }
 
     render(){
@@ -39,8 +47,7 @@ class Lobby extends react.Component{
                 {this.state.rooms ? this.state.rooms.map((room) => {
                     return <Button variant="contained" key={"roomKey"+room} 
                     onClick={() => 
-                        //alert(room)
-                        this.socket.emit("join", {"room":room, "username":this.username})
+                      this.routeToRoom(room)
                     } >{room}</Button> 
                 }) : <div> "loading..." </div> }
                 {/* write codes to join a new room using room id*/}

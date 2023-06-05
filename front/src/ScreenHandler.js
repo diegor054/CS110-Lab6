@@ -41,6 +41,19 @@ class ScreenHandler extends react.Component{
         this.setState({screen: screen});
     }
 
+
+    logout = (data) => {
+        fetch(this.props.server_url + '/api/auth/logout', {
+            method: "POST",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        })
+    }
+
     render(){
         let display = "loading...";
         if (this.state.screen === "auth"){
@@ -55,9 +68,7 @@ class ScreenHandler extends react.Component{
         return( 
             <div>
                 <Button variant="contained" style={{left: "85%", top: "20px"}} 
-                    onClick={() =>  {
-                    fetch(this.props.server_url + '/logout');
-                    }}
+                    onClick={this.logout}
                     >Log out</Button>
                 {display}
             </div>
