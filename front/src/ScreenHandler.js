@@ -43,7 +43,6 @@ class ScreenHandler extends react.Component{
 
 
     logout = (data) => {
-        console.log("in log out")
         fetch(server_url + '/api/auth/logout', {
             method: "POST",
             mode: "cors",

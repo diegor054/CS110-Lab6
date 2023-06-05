@@ -59,7 +59,6 @@ app.use((req, res, next) => {
     next();
   } else {
     res.status(401).send("Unauthorized");
-    
   }
 });
 app.use("/api/rooms/", rooms);

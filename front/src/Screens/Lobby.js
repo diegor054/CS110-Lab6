@@ -1,7 +1,7 @@
 import react from "react";
 import { Button } from "@mui/material";
 import {io} from 'socket.io-client'
-import Chatroom from "./Chatroom";
+
 
 class Lobby extends react.Component{
     constructor(props){
