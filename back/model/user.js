@@ -16,7 +16,11 @@ const userSchema = new mongoose.Schema({
     rooms: {
         type: Array,
         required: true,
-    }
+    },
+    pfp: {
+        type: String,
+        required: true,
+    }, 
 
 })
 
