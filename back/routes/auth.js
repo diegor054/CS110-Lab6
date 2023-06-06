@@ -37,14 +37,19 @@ router.post('/signup',  async (req, res)=>{
       password: password,
       name: name,
   })
-  console.log(user + "created")
+  //console.log(user + "created")
+  //let usernameTaken = await User.findOne({ username });
+  if((await User.findOne({ username })) != null){
+    res.send(JSON.stringify("Username not available"));
+  }else{
   try{
       const dataSaved = await user.save();
       res.status(200).json({dataSaved, status: 200});
-  }
+    }
   catch (error){
       console.log(error);
       res.send("ERROR!");
+    }
   }
 })
 

@@ -58,8 +58,12 @@ class Auth extends react.Component{
                     //this.props.changeScreen("lobby");
                 }
                 else {
+                    if(data.msg === undefined){
+                        alert("Username not available.")
+                    }else{
                     console.log("failed")
                     alert(data.msg);
+                    }
                 }
             });
         });
