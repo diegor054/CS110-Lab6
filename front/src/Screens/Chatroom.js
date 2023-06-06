@@ -16,9 +16,9 @@ class Chatroom extends react.Component{
         message: " ",
       };
       
-      this.socket.on("chat message", (message) => {
+      this.socket.on("chat message", (data) => {
         this.setState((prevState) => ({
-          messages: [...prevState.messages, message],
+          messages: [...prevState.messages, data.message],
         }));
         console.log("all messages in this room: ", this.state.messages)
       });
