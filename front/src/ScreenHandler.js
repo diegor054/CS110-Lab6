@@ -3,6 +3,7 @@ import Auth from './Screens/Auth.js';
 import Lobby from "./Screens/Lobby.js";
 import Chatroom from "./Screens/Chatroom.js";
 import { Button } from "@mui/material";
+import "./Screens/screens.css"; 
 
 const server_url = "http://localhost:3001";
 
@@ -89,9 +90,11 @@ class ScreenHandler extends react.Component{
         }
         return( 
             <div>
-                <Button variant="contained" style={{left: "85%", top: "20px"}} 
+                <div class="logout-button">
+                <Button variant="contained"  
                     onClick={this.logout}
                     >Log out</Button>
+                </div>
                 {display}
             </div>
         );

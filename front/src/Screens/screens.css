@@ -27,3 +27,11 @@
     border-radius: 5px;
     color: white; 
 }
+
+
+.logout-button {
+    display: flex; 
+    justify-content: flex-end;
+    margin: 15px;
+    
+}
