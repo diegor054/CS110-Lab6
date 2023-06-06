@@ -13,7 +13,7 @@ class Chatroom extends react.Component{
       this.state = {
         messages: [],
         text: "",
-        message: " ",
+        message: "",
       };
       
       this.socket.on("chat message", (data) => {
@@ -25,9 +25,23 @@ class Chatroom extends react.Component{
       
     }
     
-    componentDidMount() {
+    componentDidMount = (data) => {
       console.log("chatroom mount: ", this.props.room, this.props.username); 
       this.socket.emit("join", {"room": this.props.room, "username": this.props.username});
+       //get messages from database
+    fetch(this.props.server_url + '/api/messages/' + `${this.props.room}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      }).then((res) => {
+      console.log("pulled messages from db");
+      res.json().then(data => {
+          this.setState({messages: data})
+          //this.setState({rooms:data, username: this.props.username}); 
+      });
+  });
     };
 
     handleMessageChange = (event) => {
@@ -82,7 +96,7 @@ class Chatroom extends react.Component{
           <div>
             {/* Show chats */}
             {this.state.messages.map((message, index) => (
-              <div key={index}>{message}</div>
+              <div key={index}>{message.sender}: {message.message}</div>
             ))}
           </div>
           <div>
