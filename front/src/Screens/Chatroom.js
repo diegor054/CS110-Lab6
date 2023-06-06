@@ -153,7 +153,9 @@ class Chatroom extends react.Component{
     }
 
     render() {
-      const isCreator = this.props.creator === this.props.username;
+      console.log("Username: ", this.props.username);
+      console.log("Creator: ", this.props.creator); 
+      const isCreator = this.props.creator === this.props.userId;
       console.log("Render props: ", this.props.room, this.props.username, this.props.creator, this.props.code, isCreator);
 
       return (
