@@ -13,10 +13,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    rooms: {
-        type: mongoose.Schema.Types.ObjectId,
+    rooms: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Room',
         required: true,
-    },
+    }],
     pfp: {
         type: String,
         required: false,

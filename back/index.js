@@ -98,6 +98,7 @@ io.on('connection', (socket)=>{
   let room = undefined;
   let userName = undefined;
   console.log("user Connected")
+
   socket.on("disconnect", ()=>{
     console.log("user Disconnected")
   })

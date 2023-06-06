@@ -6,7 +6,11 @@ const roomSchema = mongoose.Schema(
         type: String,
         required: true,
         },
-        username: {
+        users: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }],
+        creator: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }, 

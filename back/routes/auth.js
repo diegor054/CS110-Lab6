@@ -18,6 +18,7 @@ router.post('/login', async (req, res) => {
     else {
       session.authenticated = true;
       session.username = username;
+      req.user = user;
       res.json({ msg: "logged in",user:username, status: true });
     }
 });

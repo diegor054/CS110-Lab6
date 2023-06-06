@@ -10,7 +10,7 @@ module.exports = router;
 //Get all the rooms
 router.get('/all', async (req, res) => {
     // TODO: you have to check the database to only return the rooms that the user is in
-    const userRooms = await Room.find({users: req.user._id});
+    const userRooms = await Room.find({users: req.session.userId});
     res.send(userRooms);
 });
 
@@ -20,6 +20,7 @@ router.post('/create', async(req, res) => {
     const { roomName } = req.body;
     const newRoom = new Room({
         name: roomName,
+        creator: req.user._id, 
         users: [req.user._id]
     });
     await newRoom.save();
@@ -45,6 +46,9 @@ router.delete('/leave', async (req, res) => {
     // want to delete room and remove room from array of rooms in each user rooms array
     const {roomId} = req.body;
     const roomToLeave = await Room.findById(roomId);
+    if(roomToLeave.creator.toString() !== req.user._id.toString()) {
+        return res.status(403).send({message: 'Only the creator can delete the room.'});
+    }
     const index = roomToLeave.users.indexOf(req.user._id);
     if (index > -1) {
         roomToLeave.users.splice(index, 1);
