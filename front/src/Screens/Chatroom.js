@@ -162,7 +162,7 @@ class Chatroom extends react.Component{
         <div >
           <h2>Chatroom: {this.props.room}</h2>
           <h3>Invite friends with this code: {this.props.code}</h3>
-          <div className="msg-container">
+          <div className="Msg-container">
             {/* Show chats */}
             {this.state.messages.map((message, index) => (
               <div key={index}>{message.sender ? message.sender : message.username}: {message.message}</div>

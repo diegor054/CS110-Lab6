@@ -2,6 +2,7 @@
     margin: 0px;
     padding: 10px; 
     display: inline-flex;
+    flex-wrap: wrap; 
     gap: 10px;  
 }
 
@@ -38,14 +39,15 @@
 
 .room-name {
     font-size: 20px;  /* Adjust as necessary */
-  }
-  
-  .room-code {
-    font-size: 12px;  /* Adjust as necessary */
-  }
+}
 
-  .room-button{
+.room-code {
+    font-size: 12px;  /* Adjust as necessary */
+}
+
+.room-button{
     display: flex;
+    /* flex-wrap: wrap;  */
     align-items: center;
     margin: 10px;
     flex-direction: column;
