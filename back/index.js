@@ -1,4 +1,3 @@
-
 const express = require("express");
 const socket = require('socket.io');
 const http = require('http');
@@ -34,8 +33,8 @@ database.once('open', () => console.log('Connected to Database'));
 
 // Set up the session
 const sessionMiddleware = session({
-  resave: false, // Whether to save the session to the store on every request
-  saveUninitialized: false, // Whether to save uninitialized sessions to the store
+  resave: true, // Whether to save the session to the store on every request
+  saveUninitialized: true, // Whether to save uninitialized sessions to the store
   secret: process.env.SESSION_SECRET,
 })
 
@@ -74,18 +73,17 @@ io.use((socket, next) => {
   console.log("socket io middleware");
   sessionMiddleware(socket.request, {}, next);
 });
-/*
-goes to else statement, need to fix/figure that out 
+
+//goes to else statement, need to fix/figure that out 
 io.use((socket, next) => {
-  if (socket.request.session && socket.request.authenticated) {
+  if (socket.request.session && socket.request.session.authenticated) {
     next();
   } else {
     console.log("unauthorized");
-    console.log(socket.request.session + socket.request.authenticated)
     next(new Error("unauthorized"));
-  }
+  } 
 });
-*/
+
 
 io.on('connection', (socket)=>{
   console.log("user connected")
@@ -96,7 +94,6 @@ io.on('connection', (socket)=>{
   // like user might send join and join them to a different room
   // we have written codes like this in week 8 with multiple rooms
   // first time user goes to a room, need to load a bunch of messages, history of that room and show it to the user (THIS IS NEW because we have DB)
-
   let room = undefined;
   let userName = undefined;
   console.log("user Connected")
