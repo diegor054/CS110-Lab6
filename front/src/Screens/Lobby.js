@@ -61,6 +61,10 @@ class Lobby extends react.Component{
                         }
                     } >{room}</Button> 
                 }) : <div> "loading..." </div> }
+                <div style={{padding:"20px 0px 0px 0px"}}>
+                    <button variant="contained">Join Room</button>
+                    <button variant="contained">Create Room</button>
+                </div> 
                 {/* write codes to join a new room using room id*/}
                 {/* write codes to enable user to create a new room*/}
                 
