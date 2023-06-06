@@ -34,17 +34,19 @@ class Lobby extends react.Component{
             res.json().then(data => {
                 console.log("data:",data);
                 this.setState({rooms:data}); 
-                console.log("after setting rooms:",this.state.rooms, this.state.username); 
+                console.log("after setting rooms:",this.state.rooms, this.props.username); 
             });
         });
     }  
     routeToRoom(prop_room) {
         console.log("route to room"); 
-        console.log(prop_room, this.state.username, this.state.rooms);
+        console.log(prop_room, this.props.username, this.state.rooms);
         this.props.changeScreen("chatroom");
         this.props.setRoom(prop_room);
-        this.socket.emit("join", {"room":prop_room, "username":this.state.username});
-        this.setState({room: prop_room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
+
+        this.socket.emit("join", {"room":prop_room, "username":this.props.username});
+        this.setState({room: prop_room, username:this.props.username, screen: "chatroom", rooms: this.state.rooms});
+        console.log("after setting state: room, username, screen, rooms"); 
         console.log(this.state.room, this.state.username, this.state.screen, this.state.rooms);
     }
 
@@ -58,6 +60,8 @@ class Lobby extends react.Component{
                         {
                             console.log("clicked route to room"); 
                             this.routeToRoom(room);
+                            console.log("after calling function: room, username, screen, rooms"); 
+                            console.log(this.state.room, this.state.username, this.state.screen, this.state.rooms);
                         }
                     } >{room}</Button> 
                 }) : <div> "loading..." </div> }
