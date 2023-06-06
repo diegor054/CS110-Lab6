@@ -19,7 +19,7 @@ class Chatroom extends react.Component{
       
       this.socket.on("chat message", (data) => {
         this.setState((prevState) => ({
-          messages: [...prevState.messages, data.message],
+          messages: [...prevState.messages, data],
         }));
         console.log("all messages in this room: ", this.state.messages)
       });
@@ -59,10 +59,18 @@ class Chatroom extends react.Component{
 
     startLongPolling() {
       const pollInterval = 2000; // Polling interval in milliseconds
+      let isPolling = false; // Flag to track if a polling request is in progress
+    
       const checkForNewMessages = () => {
+        if (isPolling) {
+          return; // If a polling request is already in progress, do nothing
+        }
+        
+        isPolling = true; // Set the flag to indicate that a request is now in progress
+        
         const lastMessageCount = this.state.messages.length;
         const url = `${this.props.server_url}/api/messages/check/${this.props.room}?lastMessageCount=${lastMessageCount}`;
-        
+    
         fetch(url, {
           method: "GET",
           credentials: "include",
@@ -79,8 +87,7 @@ class Chatroom extends react.Component{
           })
           .then((data) => {
             console.log("data in poll: ", data.newMessages)
-           // if (data.newMessageCount > 0) {
-            if(data.newMessages){
+            if (data.newMessages) {
               // New messages are available, so fetch and update the message list
               this.fetchMessages();
             }
@@ -89,13 +96,14 @@ class Chatroom extends react.Component{
             console.log("Error checking for new messages:", error);
           })
           .finally(() => {
-            // Schedule the next polling request
+            isPolling = false; // Reset the flag to indicate that the request has completed
             setTimeout(checkForNewMessages, pollInterval);
           });
       };
+    
       // Start the initial polling request
       checkForNewMessages();
-    }
+    }    
 
     handleSendMessage = () => {
       const { message } = this.state;
@@ -143,7 +151,7 @@ class Chatroom extends react.Component{
           <div>
             {/* Show chats */}
             {this.state.messages.map((message, index) => (
-              <div key={index}>{message.sender}: {message.message}</div>
+              <div key={index}>{message.sender ? message.sender : message.username}: {message.message}</div>
             ))}
           </div>
           <div>
