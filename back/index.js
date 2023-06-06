@@ -8,6 +8,7 @@ const dotenv = require("dotenv");
 const bodyParser = require('body-parser');
 const auth = require('./routes/auth');
 const rooms = require('./routes/rooms');
+const messages = require('./routes/messages');
 
 const app = express(); 
 const server = http.createServer(app);
@@ -62,6 +63,7 @@ app.use((req, res, next) => {
   }
 });
 app.use("/api/rooms/", rooms);
+app.use("/api/messages/", messages);
 
 // Start the server
 server.listen(process.env.PORT, () => {
