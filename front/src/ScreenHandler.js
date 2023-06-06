@@ -12,7 +12,10 @@ class ScreenHandler extends react.Component{
         super(props);
 
         this.state = {
-            screen: undefined,
+            rooms: undefined,
+            username: '',
+            room: '',
+            screen: '',
         }
     }
 
@@ -41,6 +44,15 @@ class ScreenHandler extends react.Component{
         this.setState({screen: screen});
     }
 
+    setRoom = (r) => {
+        this.setState({room:r});
+
+    }
+
+    setUsername = (user) => {
+        this.setState({room:user});
+
+    }
 
     logout = (data) => {
         fetch(server_url + '/api/auth/logout', {
@@ -70,10 +82,10 @@ class ScreenHandler extends react.Component{
             display = <Auth server_url = {server_url} changeScreen={this.changeScreen}/>;
         }
         else if (this.state.screen === "lobby"){
-            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen}/>;
+            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} setUsername = {this.setUserName}/>;
         }
         else if (this.state.screen === "chatroom"){
-            display = <Chatroom server_url = {server_url} changeScreen={this.changeScreen}/>;
+            display = <Chatroom server_url = {server_url} changeScreen={this.changeScreen} room={this.state.room} username={this.state.username}/>;
         }
         return( 
             <div>

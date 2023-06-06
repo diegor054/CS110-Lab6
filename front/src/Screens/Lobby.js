@@ -34,7 +34,7 @@ class Lobby extends react.Component{
             res.json().then(data => {
                 console.log("data:",data);
                 this.setState({rooms:data}); 
-                console.log("after setting rooms:",this.state.rooms); 
+                console.log("after setting rooms:",this.state.rooms, this.state.username); 
             });
         });
     }  
@@ -42,6 +42,7 @@ class Lobby extends react.Component{
         console.log("route to room"); 
         console.log(prop_room, this.state.username, this.state.rooms);
         this.props.changeScreen("chatroom");
+        this.props.setRoom(prop_room);
         this.socket.emit("join", {"room":prop_room, "username":this.state.username});
         this.setState({room: prop_room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
         console.log(this.state.room, this.state.username, this.state.screen, this.state.rooms);
