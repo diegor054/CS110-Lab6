@@ -10,17 +10,60 @@ class Chatroom extends react.Component{
         credentials: true
       }, transports: ['websocket']
     });
+      this.state = {
+        messages: [],
+        text: "",
+        message: " ",
+      };
+      
+      this.socket.on('chat message', (message)=>{
+        this.state.messages = [...this.state.messages, message];
+      })
+      
+    }
+    
+    componentDidMount() {
+      this.socket.emit("join", {"room": this.props.room, "username": this.props.user});
+    };
+
+    handleMessageChange = (event) => {
+      this.setState({ message: event.target.value });
+    };
+  
+    handleSendMessage = () => {
+      const { message } = this.state;
+      this.socket.emit("chat message", message);
+      this.setState({ message: "" });
+    };
+  
+    goBack = () => {
+      this.props.changeScreen("lobby");
     }
 
-
-    render(){
-        return(
-            <div>
-                {/* show chats */}
-                {/* show chat input box*/}
-                Chatroom
-            </div>
-        );
+    render() {
+ 
+      return (
+        <div>
+          <h2>Chatroom</h2>
+          <div>
+            {/* Show chats */}
+            {this.state.messages.map((message, index) => (
+              <div key={index}>{message}</div>
+            ))}
+          </div>
+          <div>
+            {/* Show chat input box */}
+            <input
+              type="text"
+              value={this.state.message}
+              onChange={this.handleMessageChange}
+            />
+            <button onClick={this.handleSendMessage}>Send</button>
+            <button onClick={this.goBack}>Back</button>
+            
+          </div>
+        </div>
+      );
     }
 }
 
