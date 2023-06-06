@@ -31,7 +31,7 @@ class Chatroom extends react.Component{
     };
   
     componentDidMount = (data) => {
-      console.log("chatroom mount: ", this.props.room, this.props.username); 
+      console.log("chatroom mount: ", this.props.room, this.props.username, this.props.creator, this.props.code); 
       this.socket.emit("join", {"room": this.props.room, "username": this.props.username});
       // Get initial message history from the db
       this.fetchMessages();
@@ -40,7 +40,7 @@ class Chatroom extends react.Component{
     }
 
     fetchMessages() {
-      fetch(this.props.server_url + '/api/messages/' + `${this.props.room}`, {
+      fetch(this.props.server_url + '/api/messages/' + this.props.room, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -137,17 +137,21 @@ class Chatroom extends react.Component{
             }
         });
     });
-    };
-  
+    };    
+    handleDeleteRoom = () => {
+      this.socket.emit("delete room", this.props.room);
+    }
     goBack = () => {
       this.props.changeScreen("lobby");
     }
 
     render() {
- 
+      const isCreator = this.props.creator === this.props.username;
+      console.log("Render props: ", this.props.room, this.props.username, this.props.creator, this.props.code, isCreator);
+
       return (
         <div >
-          <h2>Chatroom {this.props.room}</h2>
+          <h2>Chatroom: {this.props.room} - invite friends with this code:{this.props.code} </h2>
           <div>
             {/* Show chats */}
             {this.state.messages.map((message, index) => (
@@ -161,8 +165,11 @@ class Chatroom extends react.Component{
               value={this.state.message}
               onChange={this.handleMessageChange}
             />
-            <button class="msg-button" onClick={this.handleSendMessage}>Send</button>
-            <button class="msg-button" onClick={this.goBack}>Back</button>
+            <button className="msg-button" onClick={this.handleSendMessage}>Send</button>
+            <button className="msg-button" onClick={this.goBack}>Back</button>
+            {isCreator && (
+              <button className="msg-button" onClick={this.handleDeleteRoom}>Delete Room</button>
+            )}
           </div>
         </div>
       );

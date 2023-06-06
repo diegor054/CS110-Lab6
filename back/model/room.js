@@ -6,6 +6,10 @@ const roomSchema = mongoose.Schema(
         type: String,
         required: true,
         },
+        code: {
+            type: Number,
+            required: true,
+        },
         users: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'

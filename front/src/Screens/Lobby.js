@@ -55,7 +55,7 @@ class Lobby extends react.Component{
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ roomName: this.state.joinRoomName }),
+            body: JSON.stringify({ roomCode: this.state.joinRoomName }),
         })
         .then((response) => response.json())
         .then((data) => {
@@ -75,6 +75,7 @@ class Lobby extends react.Component{
             this.routeToRoom(data.name);
         });
     };
+    
     render(){
         return(
             <div>
@@ -87,12 +88,17 @@ class Lobby extends react.Component{
                         {
                             this.routeToRoom(room.name);
                         }
-                    } >{room.name}</Button> 
+                    } >
+                        <div className="room-button">
+                            <div className="room-name">{room.name}</div>
+                            <div className="room-code">code: {room.code}</div> 
+                        </div>
+                    </Button> 
                 }) : <div> "loading..." </div> }
                 </div>
-                <div class="room-buttons">
+                <div className="room-buttons">
                     <TextField
-                        label="Room Name"
+                        label="Room Code"
                         variant="outlined"
                         value={this.state.joinRoomName}
                         onChange={(e) => this.setState({ joinRoomName: e.target.value })}

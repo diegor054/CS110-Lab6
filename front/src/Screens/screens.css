@@ -35,3 +35,18 @@
     margin: 15px;
     
 }
+
+.room-name {
+    font-size: 20px;  /* Adjust as necessary */
+  }
+  
+  .room-code {
+    font-size: 12px;  /* Adjust as necessary */
+  }
+
+  .room-button{
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    flex-direction: column;
+}

@@ -17,7 +17,8 @@ router.post('/login', async (req, res) => {
       return res.json({ msg: "Incorrect Password", status: false });
     else {
       session.authenticated = true;
-      session.username = username;
+      session.userId = user._id;
+      console.log("Session after login:", session);  // Log the session
       req.user = user;
       res.json({ msg: "logged in",user:username, status: true });
     }
