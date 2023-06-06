@@ -58,7 +58,7 @@ class Chatroom extends react.Component{
     }
 
     startLongPolling() {
-      const pollInterval = 5000; // Polling interval in milliseconds
+      const pollInterval = 2000; // Polling interval in milliseconds
       const checkForNewMessages = () => {
         const lastMessageCount = this.state.messages.length;
         const url = `${this.props.server_url}/api/messages/check/${this.props.room}?lastMessageCount=${lastMessageCount}`;
@@ -78,7 +78,9 @@ class Chatroom extends react.Component{
             }
           })
           .then((data) => {
-            if (data.newMessageCount > 0) {
+            console.log("data in poll: ", data.newMessages)
+           // if (data.newMessageCount > 0) {
+            if(data.newMessages){
               // New messages are available, so fetch and update the message list
               this.fetchMessages();
             }
