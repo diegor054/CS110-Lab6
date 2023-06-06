@@ -25,30 +25,78 @@ class Chatroom extends react.Component{
       });
       
     }
-    
-    componentDidMount = (data) => {
-      console.log("chatroom mount: ", this.props.room, this.props.username); 
-      this.socket.emit("join", {"room": this.props.room, "username": this.props.username});
-       //get messages from database
-    fetch(this.props.server_url + '/api/messages/' + `${this.props.room}`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-          "Content-Type": "application/json",
-      },
-      }).then((res) => {
-      console.log("pulled messages from db");
-      res.json().then(data => {
-          this.setState({messages: data})
-          //this.setState({rooms:data, username: this.props.username}); 
-      });
-  });
-    };
 
     handleMessageChange = (event) => {
       this.setState({ message: event.target.value });
     };
   
+    componentDidMount = (data) => {
+      console.log("chatroom mount: ", this.props.room, this.props.username); 
+      this.socket.emit("join", {"room": this.props.room, "username": this.props.username});
+      // Get initial message history from the db
+      this.fetchMessages();
+      // Start long polling to check for new messages periodically
+      this.startLongPolling();
+    }
+
+    fetchMessages() {
+      fetch(this.props.server_url + '/api/messages/' + `${this.props.room}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => {
+        console.log("pulled messages from db");
+        res.json().then(data => {
+          this.setState({ messages: data });
+          //this.setState({rooms:data, username: this.props.username}); 
+        });
+      }).catch((error) => {
+        console.log("Error fetching messages:", error);
+      });
+    }
+
+    startLongPolling() {
+      const pollInterval = 2000; // Polling interval in milliseconds
+      const checkForNewMessages = () => {
+        const lastMessageCount = this.state.messages.length;
+        const url = `${this.props.server_url}/api/messages/check/${this.props.room}?lastMessageCount=${lastMessageCount}`;
+        
+        fetch(url, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            } else {
+              throw new Error("Failed to check for new messages.");
+            }
+          })
+          .then((data) => {
+            console.log("data in poll: ", data.newMessages)
+           // if (data.newMessageCount > 0) {
+            if(data.newMessages){
+              // New messages are available, so fetch and update the message list
+              this.fetchMessages();
+            }
+          })
+          .catch((error) => {
+            console.log("Error checking for new messages:", error);
+          })
+          .finally(() => {
+            // Schedule the next polling request
+            setTimeout(checkForNewMessages, pollInterval);
+          });
+      };
+      // Start the initial polling request
+      checkForNewMessages();
+    }
+
     handleSendMessage = () => {
       const { message } = this.state;
       const {username, room} = this.props;
@@ -59,8 +107,6 @@ class Chatroom extends react.Component{
       }
       this.socket.emit("chat message", data);
       this.setState({ message: "" });
-
-
       fetch(this.props.server_url + '/api/messages', {
         method: "POST",
         mode: "cors",
