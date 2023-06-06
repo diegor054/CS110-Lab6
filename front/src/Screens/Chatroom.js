@@ -36,13 +36,44 @@ class Chatroom extends react.Component{
   
     handleSendMessage = () => {
       const { message } = this.state;
-      this.socket.emit("chat message", message);
+      const {username, room} = this.props;
+      const data = {
+        username: username,
+        room: room,
+        message: message
+      }
+      this.socket.emit("chat message", data);
       this.setState({ message: "" });
     };
   
     goBack = () => {
       this.props.changeScreen("lobby");
     }
+
+    sendMessage = (data) => {
+      fetch(this.props.server_url + '/api/auth/signup', {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+          },
+          body: JSON.stringify(data),
+      }).then((res) => {
+          res.json().then((data) => {
+              console.log(data.status)
+              if (data.status === 200) {
+                  alert("Account created");
+                  //this.props.changeScreen("lobby");
+              }
+              else {
+                  console.log("failed")
+                  alert(data.msg);
+              }
+          });
+      });
+  }
 
     render() {
  
