@@ -51,7 +51,7 @@ class ScreenHandler extends react.Component{
 
     setUsername = (user) => {
         this.setState({username:user});
-        console.log("in sh: ", this.state.username)
+        console.log("setUsername: ", this.state.username);
     }
 
     logout = (data) => {
@@ -82,7 +82,7 @@ class ScreenHandler extends react.Component{
             display = <Auth server_url = {server_url} changeScreen={this.changeScreen} setUsername={this.setUsername}/>;
         }
         else if (this.state.screen === "lobby"){
-            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} setUsername={this.setUsername} />;
+            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} username={this.state.username}/>;
         }
         else if (this.state.screen === "chatroom"){
             display = <Chatroom server_url = {server_url} changeScreen={this.changeScreen} room={this.state.room} username={this.state.username}/>;

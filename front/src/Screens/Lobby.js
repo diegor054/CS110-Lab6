@@ -33,21 +33,21 @@ class Lobby extends react.Component{
             console.log("component did mount");
             res.json().then(data => {
                 console.log("data:",data);
-                this.setState({rooms:data}); 
-                console.log("after setting rooms:",this.state.rooms, this.props.username); 
+                this.setState({rooms:data, username: this.props.username}); 
+                console.log("after setting rooms & username:",this.state.rooms, this.props.username); 
             });
         });
     }  
-    routeToRoom(prop_room) {
-        console.log("route to room"); 
-        console.log(prop_room, this.props.username, this.state.rooms);
+    routeToRoom(room) {
+        console.log("route to room: room, username, rooms"); 
+        console.log(room, this.state.username, this.state.rooms);
         this.props.changeScreen("chatroom");
-        this.props.setRoom(prop_room);
+        this.props.setRoom(room);
 
-        this.socket.emit("join", {"room":prop_room, "username":this.props.username});
-        this.setState({room: prop_room, username:this.props.username, screen: "chatroom", rooms: this.state.rooms});
-        console.log("after setting state: room, username, screen, rooms"); 
-        console.log(this.state.room, this.state.username, this.state.screen, this.state.rooms);
+        this.socket.emit("join", {"room":room, "username":this.state.username});
+        this.setState({room: room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
+        // console.log("after setting state: room, username, screen, rooms"); 
+        // console.log(this.state.room, this.state.username, this.state.screen, this.state.rooms);
     }
 
     render(){
@@ -58,10 +58,10 @@ class Lobby extends react.Component{
                     return <Button variant="contained" key={"roomKey"+room} 
                     onClick={() => 
                         {
-                            console.log("clicked route to room"); 
+                            // console.log("clicked route to room"); 
                             this.routeToRoom(room);
-                            console.log("after calling function: room, username, screen, rooms"); 
-                            console.log(this.state.room, this.state.username, this.state.screen, this.state.rooms);
+                            // console.log("after calling function: room, username, screen, rooms"); 
+                            // console.log(this.state.room, this.state.username, this.state.screen, this.state.rooms);
                         }
                     } >{room}</Button> 
                 }) : <div> "loading..." </div> }
