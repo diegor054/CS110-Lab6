@@ -57,20 +57,22 @@ class Chatroom extends react.Component{
       });
     }
 
+    pollingTimeout;
+    isPolling = false; // Flag to track if a polling request is in progress
+
     startLongPolling() {
       const pollInterval = 2000; // Polling interval in milliseconds
-      let isPolling = false; // Flag to track if a polling request is in progress
-    
+  
       const checkForNewMessages = () => {
-        if (isPolling) {
+        if (this.isPolling) {
           return; // If a polling request is already in progress, do nothing
         }
-        
-        isPolling = true; // Set the flag to indicate that a request is now in progress
-        
+  
+        this.isPolling = true; // Set the flag to indicate that a request is now in progress
+  
         const lastMessageCount = this.state.messages.length;
         const url = `${this.props.server_url}/api/messages/check/${this.props.room}?lastMessageCount=${lastMessageCount}`;
-    
+  
         fetch(url, {
           method: "GET",
           credentials: "include",
@@ -86,7 +88,7 @@ class Chatroom extends react.Component{
             }
           })
           .then((data) => {
-            console.log("data in poll: ", data.newMessages)
+            console.log("data in poll: ", data.newMessages);
             if (data.newMessages) {
               // New messages are available, so fetch and update the message list
               this.fetchMessages();
@@ -96,14 +98,19 @@ class Chatroom extends react.Component{
             console.log("Error checking for new messages:", error);
           })
           .finally(() => {
-            isPolling = false; // Reset the flag to indicate that the request has completed
-            setTimeout(checkForNewMessages, pollInterval);
+            this.isPolling = false; // Reset the flag to indicate that the request has completed
+            this.pollingTimeout = setTimeout(checkForNewMessages, pollInterval);
           });
       };
-    
+  
       // Start the initial polling request
       checkForNewMessages();
-    }    
+    }
+
+    componentWillUnmount() {
+      clearTimeout(this.pollingTimeout);
+      console.log("CHATROOM UNMOUNT");
+    }
 
     handleSendMessage = () => {
       const { message } = this.state;
