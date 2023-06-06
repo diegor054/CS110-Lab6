@@ -101,6 +101,7 @@ io.on('connection', (socket)=>{
   })
   socket.on("chat message", (data)=>{
     console.log("got the message", data)
+    console.log(room);
     io.to(room).emit("chat message", data)
   })
   socket.on("join", (data) => {
