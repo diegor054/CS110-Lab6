@@ -16,9 +16,9 @@ class Chatroom extends react.Component{
         message: " ",
       };
       
-      this.socket.on("chat message", (message) => {
+      this.socket.on("chat message", (data) => {
         this.setState((prevState) => ({
-          messages: [...prevState.messages, message],
+          messages: [...prevState.messages, data.message],
         }));
         console.log("all messages in this room: ", this.state.messages)
       });
@@ -36,8 +36,38 @@ class Chatroom extends react.Component{
   
     handleSendMessage = () => {
       const { message } = this.state;
-      this.socket.emit("chat message", message);
+      const {username, room} = this.props;
+      const data = {
+        username: username,
+        room: room,
+        message: message
+      }
+      this.socket.emit("chat message", data);
       this.setState({ message: "" });
+
+
+      fetch(this.props.server_url + '/api/messages', {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(data),
+    }).then((res) => {
+        res.json().then((data) => {
+            console.log(data.status)
+            if (data.status === 200) {
+                //alert("Account created");
+                //this.props.changeScreen("lobby");
+            }
+            else {
+                console.log("failed to send message to database")
+                alert(data.msg);
+            }
+        });
+    });
     };
   
     goBack = () => {
