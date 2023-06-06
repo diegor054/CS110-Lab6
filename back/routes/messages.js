@@ -1,10 +1,10 @@
 const express = require('express');
-const User = require('../model/messages');
+const Messages = require('../model/messages');
 const router = express.Router()
 
 module.exports = router;
 
-router.post('/messages',  async (req, res)=>{
+router.post('/',  async (req, res)=>{
     const {username, room, message} = req.body;
     const newMessage = new Messages ({
         sender: username,
