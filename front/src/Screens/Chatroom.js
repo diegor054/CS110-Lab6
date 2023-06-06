@@ -151,7 +151,7 @@ class Chatroom extends react.Component{
           <div>
             {/* Show chats */}
             {this.state.messages.map((message, index) => (
-              <div key={index}>{message.sender}: {message.message}</div>
+              <div key={index}>{message.sender ? message.sender : message.username}: {message.message}</div>
             ))}
           </div>
           <div>
