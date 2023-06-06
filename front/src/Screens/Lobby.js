@@ -1,7 +1,8 @@
 import react from "react";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import {io} from 'socket.io-client';
 import './screens.css'; 
+
 
 
 class Lobby extends react.Component{
@@ -49,6 +50,31 @@ class Lobby extends react.Component{
         // console.log(this.state.room, this.state.username, this.state.screen, this.state.rooms);
     }
 
+    handleJoinRoom = () => {
+        fetch(this.props.server_url + '/api/rooms/join', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ roomName: this.state.joinRoomName }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            this.routeToRoom(data.name);
+        });
+    };
+    
+    handleCreateRoom = () => {
+        fetch(this.props.server_url + '/api/rooms/create', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ roomName: this.state.createRoomName }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            this.routeToRoom(data.name);
+        });
+    };
     render(){
         return(
             <div>
@@ -56,20 +82,29 @@ class Lobby extends react.Component{
                 <h2>Welcome {this.state.username}!</h2>
                 <div className="room-buttons">
                 {this.state.rooms ? this.state.rooms.map((room) => {
-                    return <Button variant="contained" key={"roomKey"+room} 
+                    return <Button variant="contained" key={room._id} 
                     onClick={() => 
                         {
-                            // console.log("clicked route to room"); 
-                            this.routeToRoom(room);
-                            // console.log("after calling function: room, username, screen, rooms"); 
-                            // console.log(this.state.room, this.state.username, this.state.screen, this.state.rooms);
+                            this.routeToRoom(room.name);
                         }
-                    } >{room}</Button> 
+                    } >{room.name}</Button> 
                 }) : <div> "loading..." </div> }
                 </div>
                 <div class="room-buttons">
-                    <Button variant="contained">Join Room</Button>
-                    <Button variant="contained">Create Room</Button>
+                    <TextField
+                        label="Room Name"
+                        variant="outlined"
+                        value={this.state.joinRoomName}
+                        onChange={(e) => this.setState({ joinRoomName: e.target.value })}
+                    />
+                    <Button variant="contained" onClick={this.handleJoinRoom}>Join Room</Button>
+                    <TextField
+                        label="Room Name"
+                        variant="outlined"
+                        value={this.state.createRoomName}
+                        onChange={(e) => this.setState({ createRoomName: e.target.value })}
+                    />
+                    <Button variant="contained" onClick={this.handleCreateRoom}>Create Room</Button>
                 </div> 
                 {/* write codes to join a new room using room id*/}
                 {/* write codes to enable user to create a new room*/}

@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const auth = require('./routes/auth');
 const rooms = require('./routes/rooms');
 const messages = require('./routes/messages');
+const User = require('./model/user');  
 
 const app = express(); 
 const server = http.createServer(app);
@@ -41,6 +42,17 @@ const sessionMiddleware = session({
 
 app.use(sessionMiddleware);
 
+app.use(async (req, res, next) => {
+  if (req.session && req.session.authenticated) {
+    // assuming your user's _id is stored in the session as userId
+    req.user = await User.findById(req.session.userId);
+    next();
+  } else {
+    next();
+  }
+});
+
+
 app.get('/', (req, res) => {
   if (req.session && req.session.authenticated) {
     res.json({ message: "logged in" });
@@ -62,6 +74,7 @@ app.use((req, res, next) => {
     res.status(401).send("Unauthorized");
   }
 });
+
 app.use("/api/rooms/", rooms);
 app.use("/api/messages/", messages);
 

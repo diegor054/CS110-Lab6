@@ -20,8 +20,8 @@ router.post('/create', async(req, res) => {
     const { roomName } = req.body;
     const newRoom = new Room({
         name: roomName,
-        creator: req.user._id, 
-        users: [req.user._id]
+        creator: req.session.userId, 
+        users: [req.session.userId]
     });
     await newRoom.save();
     req.user.rooms.push(newRoom._id);
@@ -33,12 +33,14 @@ router.post('/join', async (req, res) => {
     // TODO: write necassary codes to join a new room
     const { roomName } = req.body;
     const roomToJoin = await Room.findOne({name: roomName});
-    roomToJoin.users.push(req.user._id);
+    roomToJoin.users.push(req.session.userId);
     await roomToJoin.save();
     req.user.rooms.push(roomToJoin._id);
     await req.user.save();
     res.send(roomToJoin);
 });
+
+
 
 router.delete('/leave', async (req, res) => {
     // TODO: write necassary codes to delete a room
@@ -46,10 +48,10 @@ router.delete('/leave', async (req, res) => {
     // want to delete room and remove room from array of rooms in each user rooms array
     const {roomId} = req.body;
     const roomToLeave = await Room.findById(roomId);
-    if(roomToLeave.creator.toString() !== req.user._id.toString()) {
+    if(roomToLeave.creator.toString() !== req.session.userId.toString()) {
         return res.status(403).send({message: 'Only the creator can delete the room.'});
     }
-    const index = roomToLeave.users.indexOf(req.user._id);
+    const index = roomToLeave.users.indexOf(req.session.userId);
     if (index > -1) {
         roomToLeave.users.splice(index, 1);
     }
