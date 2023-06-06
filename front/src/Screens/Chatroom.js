@@ -13,7 +13,7 @@ class Chatroom extends react.Component{
       this.state = {
         messages: [],
         text: "",
-        message: " ",
+        message: "",
       };
       
       this.socket.on("chat message", (data) => {
