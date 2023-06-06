@@ -24,8 +24,8 @@ class Chatroom extends react.Component{
     }
     
     componentDidMount() {
-      console.log("chatroom mount: ", this.props.room, this.props.user); 
-      this.socket.emit("join", {"room": this.props.room, "username": this.props.user});
+      console.log("chatroom mount: ", this.props.room, this.props.username); 
+      this.socket.emit("join", {"room": this.props.room, "username": this.props.username});
     };
 
     handleMessageChange = (event) => {
