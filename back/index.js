@@ -84,7 +84,6 @@ io.use((socket, next) => {
   } 
 });
 
-
 io.on('connection', (socket)=>{
   console.log("user connected")
   // TODO: write codes for the messaging functionality
@@ -106,9 +105,9 @@ io.on('connection', (socket)=>{
   })
   socket.on("join", (data) => {
     socket.join(data.room);
-    room = data.room
-    userName = data.username
-    console.log(`user is joined to room ${data.room}`)
+    room = data.room;
+    userName = data.username;
+    console.log(`socket: user ${data.username} is joined to room ${data.room}`);
   })
 
   socket.emit("starting data", {"text":"hi"})

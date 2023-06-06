@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     pfp: {
         type: String,
-        required: true,
+        required: false,
     }, 
 
 })

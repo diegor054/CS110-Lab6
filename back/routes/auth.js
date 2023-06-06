@@ -35,7 +35,7 @@ router.post('/signup',  async (req, res)=>{
   const user = new User ({
       username: username,
       password: password,
-      name: name
+      name: name,
   })
   console.log(user + "created")
   try{

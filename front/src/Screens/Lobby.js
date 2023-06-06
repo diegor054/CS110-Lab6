@@ -30,15 +30,21 @@ class Lobby extends react.Component{
             },
             body: JSON.stringify(data),
         }).then((res) => {
-            res.json().then((data) => {
-                this.setState({rooms:data})
+            console.log("component did mount");
+            res.json().then(data => {
+                console.log("data:",data);
+                this.setState({rooms:data}); 
+                console.log("after setting rooms:",this.state.rooms); 
             });
         });
     }  
-    routeToRoom(room) {
+    routeToRoom(prop_room) {
+        console.log("route to room"); 
+        console.log(prop_room, this.state.username, this.state.rooms);
         this.props.changeScreen("chatroom");
-        this.socket.emit("join", {"room":room, "username":this.state.username});
-        this.setState({room:room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
+        this.socket.emit("join", {"room":prop_room, "username":this.state.username});
+        this.setState({room: prop_room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
+        console.log(this.state.room, this.state.username, this.state.screen, this.state.rooms);
     }
 
     render(){
@@ -48,7 +54,10 @@ class Lobby extends react.Component{
                 {this.state.rooms ? this.state.rooms.map((room) => {
                     return <Button variant="contained" key={"roomKey"+room} 
                     onClick={() => 
-                      this.routeToRoom(room)
+                        {
+                            console.log("clicked route to room"); 
+                            this.routeToRoom(room);
+                        }
                     } >{room}</Button> 
                 }) : <div> "loading..." </div> }
                 {/* write codes to join a new room using room id*/}
