@@ -31,4 +31,23 @@ router.post('/',  async (req, res)=>{
         console.log(error);
         res.send("ERROR!");
     }
-  })
+})
+
+router.get('/check/:room', async (req, res) => {
+    const room = req.params.room;
+    try {
+      const lastMessageCount = req.query.lastMessageCount;
+      const query = { room };
+      const messageCount = await Messages.countDocuments(query);
+  
+      const newMessageCount = messageCount - lastMessageCount;
+      console.log(messageCount);
+      console.log(lastMessageCount);
+      const hasNewMessages = newMessageCount !== 0;
+  
+      res.status(200).json({ newMessages: hasNewMessages, messageCount });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Error checking for new messages");
+    }
+  });
