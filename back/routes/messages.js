@@ -4,6 +4,17 @@ const router = express.Router()
 
 module.exports = router;
 
+router.get('/:room', async (req, res) => {
+    const room = req.params.room;
+    try {
+        const messages = await Messages.find({room});
+        res.status(200).json(messages);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Error retrieving message history");
+    }
+});
+
 router.post('/',  async (req, res)=>{
     const {username, room, message} = req.body;
     const newMessage = new Messages ({
