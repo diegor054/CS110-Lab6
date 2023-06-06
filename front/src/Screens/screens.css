@@ -50,3 +50,16 @@
     margin: 10px;
     flex-direction: column;
 }
+
+.chat-div {
+    bottom: 0; 
+    position: fixed; 
+    background-color: rgb(62, 62, 106); 
+    width: 100%; 
+    padding: 10px 0px 10px 50px;
+    left: 0px;
+}
+
+.msg-container {
+    padding-bottom: 60px; 
+}
