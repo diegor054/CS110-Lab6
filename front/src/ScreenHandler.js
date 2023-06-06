@@ -17,6 +17,7 @@ class ScreenHandler extends react.Component{
             username: '',
             room: '',
             screen: '',
+            code: '',
         }
     }
 
@@ -43,11 +44,17 @@ class ScreenHandler extends react.Component{
 
     changeScreen = (screen) => {
         this.setState({screen: screen});
+        console.log("changeScreen: ", this.state.screen);
     }
 
     setRoom = (r) => {
         this.setState({room:r});
+        console.log("setRoom: ", this.state.room);
 
+    }
+    setCode = (code) => {
+        this.setState({code:code});
+        console.log("setCode: ", this.state.code);
     }
 
     setUsername = (user) => {
@@ -87,10 +94,10 @@ class ScreenHandler extends react.Component{
                 this.changeScreen("auth"); 
                 display = <Auth server_url = {server_url} changeScreen={this.changeScreen} setUsername={this.setUsername}/>;
             }
-            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} username={this.state.username}/>;
+            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} username={this.state.username} setCode={this.setCode}/>;
         }
         else if (this.state.screen === "chatroom"){
-            display = <Chatroom server_url = {server_url} changeScreen={this.changeScreen} room={this.state.room} username={this.state.username}/>;
+            display = <Chatroom server_url = {server_url} changeScreen={this.changeScreen} room={this.state.room} username={this.state.username} code={this.state.code}/>;
         }
         return( 
             <div>

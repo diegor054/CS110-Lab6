@@ -38,11 +38,12 @@ class Lobby extends react.Component{
             });
         });
     }  
-    routeToRoom(room) {
+    routeToRoom(room, code) {
         console.log("route to room: room, username, rooms"); 
         console.log(room, this.state.username, this.state.rooms);
         this.props.changeScreen("chatroom");
         this.props.setRoom(room);
+        this.props.setCode(code); 
 
         this.socket.emit("join", {"room":room, "username":this.state.username});
         this.setState({room: room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
@@ -86,7 +87,7 @@ class Lobby extends react.Component{
                     return <Button variant="contained" key={room._id} 
                     onClick={() => 
                         {
-                            this.routeToRoom(room.name);
+                            this.routeToRoom(room.name, room.code);
                         }
                     } >
                         <div className="room-button">
