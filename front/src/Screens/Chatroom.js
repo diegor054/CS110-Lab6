@@ -1,5 +1,6 @@
 import react from "react";
-import {io} from 'socket.io-client'
+import {io} from 'socket.io-client';
+import './screens.css'; 
 
 class Chatroom extends react.Component{
     constructor(props){
@@ -91,7 +92,7 @@ class Chatroom extends react.Component{
     render() {
  
       return (
-        <div>
+        <div >
           <h2>Chatroom {this.props.room}</h2>
           <div>
             {/* Show chats */}
@@ -106,9 +107,8 @@ class Chatroom extends react.Component{
               value={this.state.message}
               onChange={this.handleMessageChange}
             />
-            <button onClick={this.handleSendMessage}>Send</button>
-            <button onClick={this.goBack}>Back</button>
-            
+            <button class="msg-button" onClick={this.handleSendMessage}>Send</button>
+            <button class="msg-button" onClick={this.goBack}>Back</button>
           </div>
         </div>
       );
