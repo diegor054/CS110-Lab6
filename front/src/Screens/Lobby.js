@@ -1,6 +1,7 @@
 import react from "react";
 import { Button } from "@mui/material";
-import {io} from 'socket.io-client'
+import {io} from 'socket.io-client';
+import './screens.css'; 
 
 
 class Lobby extends react.Component{
@@ -54,6 +55,8 @@ class Lobby extends react.Component{
         return(
             <div>
                 <h1>Lobby</h1>
+                <h2>Welcome {this.state.username}!</h2>
+                <div class="room-buttons">
                 {this.state.rooms ? this.state.rooms.map((room) => {
                     return <Button variant="contained" key={"roomKey"+room} 
                     onClick={() => 
@@ -65,7 +68,8 @@ class Lobby extends react.Component{
                         }
                     } >{room}</Button> 
                 }) : <div> "loading..." </div> }
-                <div style={{padding:"20px 0px 0px 0px"}}>
+                </div>
+                <div class="room-buttons">
                     <Button variant="contained">Join Room</Button>
                     <Button variant="contained">Create Room</Button>
                 </div> 

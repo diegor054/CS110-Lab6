@@ -1,5 +1,6 @@
 import react from "react";
 import { Button, TextField } from "@mui/material";
+import './../Screens/screens.css'; 
 
 class Form extends react.Component{
     constructor(props){
@@ -33,26 +34,27 @@ class Form extends react.Component{
     render(){
         return (
             <div>
-                <div>
-                    <Button onClick={this.props.close}> x </Button>
+                
+                <Button onClick={this.props.close}> x </Button>
+                <div class="user-form">
                     <h3> {this.props.type} </h3>
-                </div>
 
-                <form onSubmit={this.handleSubmit}>
-                    {this.state.fields.map((field, index) => {
-                        return(
-                            <div>
-                                <TextField 
-                                    variant="standard" 
-                                    key={"auth"+field[1]} 
-                                    label={field[1]} 
-                                    onChange={(event) => this.handleChange(event, index)}
-                                />
-                            </div>
-                        );
-                    })}
-                    <input type="submit"></input>
-                </form>
+                    <form onSubmit={this.handleSubmit}>
+                        {this.state.fields.map((field, index) => {
+                            return(
+                                <div>
+                                    <TextField 
+                                        variant="standard" 
+                                        key={"auth"+field[1]} 
+                                        label={field[1]} 
+                                        onChange={(event) => this.handleChange(event, index)}
+                                    />
+                                </div>
+                            );
+                        })}
+                        <input class="user-submit" type="submit"></input>
+                    </form>
+                </div>
 
             </div>
         );

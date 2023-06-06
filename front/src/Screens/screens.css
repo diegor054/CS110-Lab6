@@ -1,0 +1,20 @@
+.room-buttons {
+    margin: 0px;
+    padding: 10px; 
+    display: inline-flex;
+    gap: 10px;  
+}
+
+.user-form {
+    padding: 0px 20px 0px 20px; 
+    /* border: solid grey 1px;  */
+}
+
+.user-submit {
+    padding: 10px; 
+    margin-top: 20px; 
+    background-color: rgb(4, 116, 201); 
+    border: none; 
+    border-radius: 5%; 
+    color: white; 
+}
