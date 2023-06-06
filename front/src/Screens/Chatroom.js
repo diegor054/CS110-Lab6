@@ -44,36 +44,35 @@ class Chatroom extends react.Component{
       }
       this.socket.emit("chat message", data);
       this.setState({ message: "" });
+
+
+      fetch(this.props.server_url + '/api/messages', {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(data),
+    }).then((res) => {
+        res.json().then((data) => {
+            console.log(data.status)
+            if (data.status === 200) {
+                //alert("Account created");
+                //this.props.changeScreen("lobby");
+            }
+            else {
+                console.log("failed to send message to database")
+                alert(data.msg);
+            }
+        });
+    });
     };
   
     goBack = () => {
       this.props.changeScreen("lobby");
     }
-
-    sendMessage = (data) => {
-      fetch(this.props.server_url + '/api/auth/signup', {
-          method: "POST",
-          mode: "cors",
-          credentials: "include",
-          headers: {
-              "Content-Type": "application/json",
-              "Accept": "application/json"
-          },
-          body: JSON.stringify(data),
-      }).then((res) => {
-          res.json().then((data) => {
-              console.log(data.status)
-              if (data.status === 200) {
-                  alert("Account created");
-                  //this.props.changeScreen("lobby");
-              }
-              else {
-                  console.log("failed")
-                  alert(data.msg);
-              }
-          });
-      });
-  }
 
     render() {
  
