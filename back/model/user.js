@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
     rooms: {
-        type: Array,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
     pfp: {
