@@ -36,7 +36,7 @@ class Form extends react.Component{
             <div>
                 
                 <Button onClick={this.props.close}> x </Button>
-                <div class="user-form">
+                <div className="user-form">
                     <h3> {this.props.type} </h3>
 
                     <form onSubmit={this.handleSubmit}>
@@ -52,7 +52,7 @@ class Form extends react.Component{
                                 </div>
                             );
                         })}
-                        <input class="user-submit" type="submit"></input>
+                        <input className="user-submit" type="submit"></input>
                     </form>
                 </div>
 

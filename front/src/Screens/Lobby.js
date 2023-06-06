@@ -30,7 +30,6 @@ class Lobby extends react.Component{
                 "Content-Type": "application/json",
             },
         }).then((res) => {
-            console.log("component did mount");
             res.json().then(data => {
                 console.log("data:",data);
                 this.setState({rooms:data, username: this.props.username}); 
@@ -55,7 +54,7 @@ class Lobby extends react.Component{
             <div>
                 <h1>Lobby</h1>
                 <h2>Welcome {this.state.username}!</h2>
-                <div class="room-buttons">
+                <div className="room-buttons">
                 {this.state.rooms ? this.state.rooms.map((room) => {
                     return <Button variant="contained" key={"roomKey"+room} 
                     onClick={() => 
