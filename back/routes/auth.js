@@ -1,25 +1,37 @@
 const express = require('express');
 const User = require('../model/user');
 const router = express.Router()
+const speakeasy = require("speakeasy");
+const nodemailer = require("nodemailer");
+const sgMail = require('@sendgrid/mail');
+require('dotenv').config()
 
-module.exports = router;
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 router.post('/login', async (req, res) => {
     const {session} = req;
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     // check if user in database
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ email });
     
     if (!user)
-      return res.json({ msg: "Incorrect Username ", status: false });
+      return res.json({ msg: "Incorrect Email ", status: false });
     else if (user.password !== password)
       return res.json({ msg: "Incorrect Password", status: false });
     else {
-      session.authenticated = true;
-      session.userId = user._id;
-      req.user = user;
-      res.json({ msg: "logged in",user:username, status: true, creator:session.userId, });
+      let token = speakeasy.totp({
+        secret: user.secret,
+        encoding: "base32",
+      });
+      const msg = {
+          to: user.email,
+          from: "dboul001@ucr.edu",
+          subject: "CS110 Login Verification",
+          html: `<h1>Your 2FA token is: ${token}</h1>`
+        };
+      sgMail.send(msg);
+      res.status(200).send('A token has been sent to your email for verification');
     }
 });
 
@@ -32,16 +44,17 @@ router.post('/logout', async (req, res) => {
 
 // write the sign up page here
 router.post('/signup',  async (req, res)=>{
-  const {username, password, name} = req.body;
+  const {email, password, name, username} = req.body;
+  let secret = speakeasy.generateSecret({length: 20});
   const user = new User ({
+      email: email,
       username: username,
       password: password,
       name: name,
+      secret: secret.base32
   })
-  //console.log(user + "created")
-  //let usernameTaken = await User.findOne({ username });
-  if((await User.findOne({ username })) != null){
-    res.send(JSON.stringify("Username not available"));
+  if((await User.findOne({ email })) != null){
+    res.send(JSON.stringify("Email already registered"));
   }else{
   try{
       const dataSaved = await user.save();
@@ -54,4 +67,25 @@ router.post('/signup',  async (req, res)=>{
   }
 })
 
-// write the edit webpage function here (change profile?)
+router.post('/verify', async (req, res) => {
+    const { token, email } = req.body;
+    const user = await User.findOne({ email });
+    const { username } = user;
+    const { session } = req;
+    let tokenIsValid = speakeasy.totp.verify({
+      secret: user.secret,
+      encoding: "base32",
+      token: token,
+      window:2
+    });
+    if (tokenIsValid) {
+      req.session.authenticated = true;
+      req.session.userId = user._id;
+      req.session.user = user;
+      res.json({ msg: "logged in", user: username, status: true, creator: session.userId });
+    } else {
+      return res.json({ msg: "Incorrect Token", status: false });
+    }
+});
+      
+module.exports = router;

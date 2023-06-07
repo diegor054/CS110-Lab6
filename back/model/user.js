@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    username: {
+    
+    email: {
         required: true,
         type: String
     },
@@ -9,9 +10,16 @@ const userSchema = new mongoose.Schema({
         required: true,
         type: String
     },
+    username: {
+        required: true,
+        type: String
+    },
     name: {
         type: String,
         required: true,
+    },
+    secret: {
+        type: String,
     },
     rooms: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Room',
