@@ -40,6 +40,7 @@ router.post('/create', async(req, res) => {
 router.post('/join', async (req, res) => {
     // TODO: write necassary codes to join a new room
     const { roomCode } = req.body;
+    console.log("IN JOIN")
     const roomToJoin = await Room.findOne({code: roomCode});
     if (!roomToJoin) {
         return res.status(404).send({message: 'Room does not exist.'});

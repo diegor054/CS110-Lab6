@@ -15,6 +15,8 @@ class Chatroom extends react.Component{
         messages: [],
         text: "",
         message: "",
+        userId: "",
+        roomCreator: '',
       };
       
       this.socket.on("chat message", (data) => {
@@ -34,6 +36,8 @@ class Chatroom extends react.Component{
       console.log("chatroom mount: ", this.props.room, this.props.username, this.props.creator, this.props.code); 
       this.socket.emit("join", {"room": this.props.room, "username": this.props.username});
       // Get initial message history from the db
+      this.setState({userId: this.props.creator});
+      this.setState({roomCreator: this.props.roomCreator});
       this.fetchMessages();
       // Start long polling to check for new messages periodically
       this.startLongPolling();
@@ -156,9 +160,9 @@ class Chatroom extends react.Component{
     }
 
     render() {
-      console.log("Username: ", this.props.username);
-      console.log("Creator: ", this.props.creator); 
-      const isCreator = this.props.creator === this.props.userId;
+      console.log("UserId: ", this.state.userId);
+      console.log("Creator: ", this.state.roomCreator); 
+      const isCreator = (this.state.userId === this.state.roomCreator);
       console.log("Render props: ", this.props.room, this.props.username, this.props.creator, this.props.code, isCreator);
 
       return (

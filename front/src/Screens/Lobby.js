@@ -36,17 +36,16 @@ class Lobby extends react.Component{
                 console.log("data:",data);
                 this.setState({rooms:data, username: this.props.username, creator:this.props.creator}); 
                 console.log("creeeeeator: ", this.state.creator)
-                console.log("after setting rooms & username:",this.state.rooms, this.props.username); 
             });
         });
     }  
-    routeToRoom(room, code) {
+    routeToRoom(room, code,creator) {
         console.log("route to room: room, username, rooms"); 
-        console.log(room, this.state.username, this.state.rooms, this.state.creator);
+        console.log(room, this.state.username, this.state.rooms);
         this.props.changeScreen("chatroom");
         this.props.setRoom(room);
         this.props.setCode(code); 
-
+        this.props.setCreatorOfRoom(creator)
         this.socket.emit("join", {"room":room, "username":this.state.username, "creator":this.state.creator});
         this.setState({room: room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
     }
@@ -58,9 +57,9 @@ class Lobby extends react.Component{
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ roomCode: this.state.joinRoomName }),
         })
-        .then((response) => response.json())
         .then((data) => {
             this.routeToRoom(data.name);
+            console.log("FETCH LOBBY JOIN") 
         });
     };
     
@@ -87,7 +86,7 @@ class Lobby extends react.Component{
                     return <Button variant="contained" key={room._id} 
                     onClick={() => 
                         {
-                            this.routeToRoom(room.name, room.code);
+                            this.routeToRoom(room.name, room.code, room.creator);
                         }
                     } >
                         <div className="room-button">
