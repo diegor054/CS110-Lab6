@@ -19,6 +19,7 @@ class Lobby extends react.Component{
             username: '',
             room: '',
             screen: 'lobby',
+            creator: '',
         }
     }
 
@@ -33,22 +34,21 @@ class Lobby extends react.Component{
         }).then((res) => {
             res.json().then(data => {
                 console.log("data:",data);
-                this.setState({rooms:data, username: this.props.username}); 
+                this.setState({rooms:data, username: this.props.username, creator:this.props.creator}); 
+                console.log("creeeeeator: ", this.state.creator)
                 console.log("after setting rooms & username:",this.state.rooms, this.props.username); 
             });
         });
     }  
     routeToRoom(room, code) {
         console.log("route to room: room, username, rooms"); 
-        console.log(room, this.state.username, this.state.rooms);
+        console.log(room, this.state.username, this.state.rooms, this.state.creator);
         this.props.changeScreen("chatroom");
         this.props.setRoom(room);
         this.props.setCode(code); 
 
-        this.socket.emit("join", {"room":room, "username":this.state.username});
+        this.socket.emit("join", {"room":room, "username":this.state.username, "creator":this.state.creator});
         this.setState({room: room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
-        // console.log("after setting state: room, username, screen, rooms"); 
-        // console.log(this.state.room, this.state.username, this.state.screen, this.state.rooms);
     }
 
     handleJoinRoom = () => {

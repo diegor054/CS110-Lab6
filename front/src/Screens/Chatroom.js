@@ -145,9 +145,12 @@ class Chatroom extends react.Component{
         });
     });
     };    
+
+    /*
     handleDeleteRoom = () => {
       this.socket.emit("delete room", this.props.room);
     }
+    */
     goBack = () => {
       this.props.changeScreen("lobby");
     }

@@ -30,7 +30,8 @@ class Auth extends react.Component{
                 if (data.msg === "logged in") {
                     //this.setState({screen: "lobby"});
                     this.props.changeScreen("lobby");
-                    console.log("this is my data", data.user)
+                    console.log("this is my data", data.creator)
+                    this.props.setCreator(data.creator);
                     this.props.setUsername(data.user)
                 }
                 else {

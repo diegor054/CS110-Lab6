@@ -19,8 +19,9 @@ router.post('/login', async (req, res) => {
       session.authenticated = true;
       session.userId = user._id;
       console.log("Session after login:", session);  // Log the session
+      console.log("HEEEEEE" , session.userId)
       req.user = user;
-      res.json({ msg: "logged in",user:username, status: true });
+      res.json({ msg: "logged in",user:username, status: true, creator:session.userId, });
     }
 });
 

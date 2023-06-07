@@ -18,6 +18,7 @@ class ScreenHandler extends react.Component{
             room: '',
             screen: '',
             code: '',
+            creator: ''
         }
     }
 
@@ -62,6 +63,12 @@ class ScreenHandler extends react.Component{
         console.log("setUsername: ", this.state.username);
     }
 
+    setCreator = (c) => {
+        this.setState({creator:c});
+    }
+
+    
+
     logout = (data) => {
         fetch(server_url + '/api/auth/logout', {
             method: "POST",
@@ -87,14 +94,15 @@ class ScreenHandler extends react.Component{
     render(){
         let display = "loading...";
         if (this.state.screen === "auth"){
-            display = <Auth server_url = {server_url} changeScreen={this.changeScreen} setUsername={this.setUsername}/>;
+            display = <Auth server_url = {server_url} changeScreen={this.changeScreen} setUsername={this.setUsername} setCreator={this.setCreator}/>;
         }
         else if (this.state.screen === "lobby"){
+            console.log("bruhhhhhh", this.state.creator)
             if (this.state.username === "") {
                 this.changeScreen("auth"); 
-                display = <Auth server_url = {server_url} changeScreen={this.changeScreen} setUsername={this.setUsername}/>;
+                display = <Auth server_url = {server_url} changeScreen={this.changeScreen} setUsername={this.setUsername} setCreator={this.setCreator}/>;
             }
-            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} username={this.state.username} setCode={this.setCode}/>;
+            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} username={this.state.username} setCode={this.setCode} creator={this.state.creator}/>;
         }
         else if (this.state.screen === "chatroom"){
             display = <Chatroom server_url = {server_url} changeScreen={this.changeScreen} room={this.state.room} username={this.state.username} code={this.state.code}/>;
