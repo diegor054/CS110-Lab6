@@ -91,7 +91,8 @@ router.post('/join', async (req, res) => {
                 console.log("in here")
                 await user.save();
             }
-        res.send({message: 'Room left successfully.'});
+            await user.save();
+        res.send({message: 'Room left successfully.', rooms:user.rooms});
     });
 
 

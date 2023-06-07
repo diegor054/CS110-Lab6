@@ -182,6 +182,7 @@ class Chatroom extends react.Component{
     .then((res) => {
         res.json().then(data => {
             this.setState({rooms:data, username: this.props.username, creator:this.props.creator});
+            console.log(data.rooms, "THTHHTHTHTH")
             this.props.changeScreen("lobby"); 
         });
     });
@@ -222,7 +223,8 @@ class Chatroom extends react.Component{
             )
           :
           (
-            <button className="msg-button" onClick={this.handleLeaveRoom}>Forget Room</button>
+            //<button className="msg-button" onClick={this.handleLeaveRoom}>Forget Room</button>
+            <div/>
           )
           }
           </div>
