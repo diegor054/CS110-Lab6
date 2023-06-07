@@ -55,12 +55,12 @@ class Auth extends react.Component{
             res.json().then((data) => {
                 console.log(data.status)
                 if (data.status === 200) {
-                    alert("Account created");
+                    alert("Account created. Please log in");
                     //this.props.changeScreen("lobby");
                 }
                 else {
                     if(data.msg === undefined){
-                        alert("Username not available.")
+                        alert("Not available.")
                     }else{
                     console.log("failed")
                     alert(data.msg);
@@ -75,11 +75,11 @@ class Auth extends react.Component{
         if (this.state.showForm){
             let fields = [];
             if (this.state.selectedForm === "login"){
-                fields = ['username', 'password'];
+                fields = ['email', 'password'];
                 display = <Form fields={fields} close={this.closeForm} type="login" submit={this.login} key={this.state.selectedForm}/>;
             }
             else if (this.state.selectedForm === "register"){
-                fields = [ 'username', 'password', 'name'];
+                fields = [ 'username', 'email', 'password', 'name'];
                 display = <Form fields={fields} close={this.closeForm} type="register" submit={this.register} key={this.state.selectedForm}/>;
             }   
         }
@@ -98,5 +98,4 @@ class Auth extends react.Component{
         );
     }
 }
-
 export default Auth;
