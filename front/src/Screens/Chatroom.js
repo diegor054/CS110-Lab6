@@ -17,6 +17,8 @@ class Chatroom extends react.Component{
         message: "",
         userId: "",
         roomCreator: '',
+        roomID: '',
+        roomName: '',
       };
       
       this.socket.on("chat message", (data) => {
@@ -38,6 +40,8 @@ class Chatroom extends react.Component{
       // Get initial message history from the db
       this.setState({userId: this.props.creator});
       this.setState({roomCreator: this.props.roomCreator});
+      this.setState({roomID: this.props.roomID});
+      this.setState({roomID: this.props.roomName});
       this.fetchMessages();
       // Start long polling to check for new messages periodically
       this.startLongPolling();
@@ -155,6 +159,19 @@ class Chatroom extends react.Component{
       this.socket.emit("delete room", this.props.room);
     }
     */
+
+    handleDeleteRoom = () => {
+      fetch(this.props.server_url + '/api/rooms/leave', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ "roomID": this.props.roomID, "roomName": this.props.roomName}),
+      })
+      .then((data) => {
+         this.props.changeScreen("lobby");
+      });
+  };
+
     goBack = () => {
       this.props.changeScreen("lobby");
     }

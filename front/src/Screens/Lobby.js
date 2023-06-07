@@ -39,10 +39,11 @@ class Lobby extends react.Component{
             });
         });
     }  
-    routeToRoom(room, code,creator) {
+    routeToRoom(room, code,creator, id) {
         console.log("route to room: room, username, rooms"); 
         console.log(room, this.state.username, this.state.rooms);
         this.props.changeScreen("chatroom");
+        this.props.setRoomID(id);
         this.props.setRoom(room);
         this.props.setCode(code); 
         this.props.setCreatorOfRoom(creator)
@@ -86,7 +87,7 @@ class Lobby extends react.Component{
                     return <Button variant="contained" key={room._id} 
                     onClick={() => 
                         {
-                            this.routeToRoom(room.name, room.code, room.creator);
+                            this.routeToRoom(room.name, room.code, room.creator, room._id);
                         }
                     } >
                         <div className="room-button">

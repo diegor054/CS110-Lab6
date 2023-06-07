@@ -4,6 +4,7 @@ const router = express.Router()
 const mongoose = require('mongoose');
 const Room = require('../model/room');  // assuming you have a Room model
 const User = require('../model/user');
+const messages = require('../model/messages');
 
 module.exports = router;
 
@@ -54,27 +55,28 @@ router.post('/join', async (req, res) => {
     
 
 
-router.delete('/leave', async (req, res) => {
     // TODO: write necassary codes to delete a room
     // owner of that room when they want to delete it they send in this type of request
     // want to delete room and remove room from array of rooms in each user rooms array
-    router.delete('/leave', async (req, res) => {
-        const {roomId} = req.body;
-        const roomToLeave = await Room.findById(roomId);
-        if(roomToLeave.creator.toString() !== req.session.userId.toString()) {
-            return res.status(403).send({message: 'Only the creator can delete the room.'});
-        }
+    router.post('/leave', async (req, res) => {
+        console.log("in leaveeeee")
+        const {roomID, roomName} = req.body;
+        console.log("roooomID" , roomID);
+        const roomToLeave = await Room.findById(roomID);
+        console.log(roomToLeave.users)
+        
         for (let userId of roomToLeave.users) {
             let user = await User.findById(userId);
-            let roomIndex = user.rooms.indexOf(roomId);
+            let roomIndex = user.rooms.indexOf(roomID);
             if (roomIndex > -1) {
                 user.rooms.splice(roomIndex, 1);
                 await user.save();
             }
         }
-        await Room.deleteOne({_id: roomId});
+        await messages.deleteMany({room: roomName});
+        
+        await Room.deleteOne({_id: roomID});
         res.send({message: 'Room deleted successfully.'});
     });
-    
-});
+
 module.exports = router;
