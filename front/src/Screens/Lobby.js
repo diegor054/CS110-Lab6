@@ -104,7 +104,7 @@ class Lobby extends react.Component{
                         value={this.state.joinRoomName}
                         onChange={(e) => this.setState({ joinRoomName: e.target.value })}
                     />
-                    <Button variant="contained" onClick={this.handleJoinRoom}>Join Room</Button>
+                    <Button variant="contained" onClick={ this.handleJoinRoom}>Join Room</Button>
                     <TextField
                         label="Room Name"
                         variant="outlined"

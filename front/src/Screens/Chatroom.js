@@ -161,7 +161,7 @@ class Chatroom extends react.Component{
     */
 
     handleDeleteRoom = () => {
-      fetch(this.props.server_url + '/api/rooms/leave', {
+      fetch(this.props.server_url + '/api/rooms/delete', {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
@@ -171,6 +171,22 @@ class Chatroom extends react.Component{
          this.props.changeScreen("lobby");
       });
   };
+
+  handleLeaveRoom = () => {
+    fetch(this.props.server_url + '/api/rooms/leave', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ "roomID": this.props.roomID, "roomName": this.props.roomName, "userID": this.props.creator}),
+    })
+    .then((res) => {
+        res.json().then(data => {
+            this.setState({rooms:data, username: this.props.username, creator:this.props.creator});
+            this.props.changeScreen("lobby"); 
+        });
+    });
+
+};
 
     goBack = () => {
       this.props.changeScreen("lobby");
@@ -201,9 +217,14 @@ class Chatroom extends react.Component{
             />
             <button className="msg-button" onClick={this.handleSendMessage}>Send</button>
             <button className="msg-button" onClick={this.goBack}>Back</button>
-            {isCreator && (
+            {isCreator ? (
               <button className="msg-button" onClick={this.handleDeleteRoom}>Delete Room</button>
-            )}
+            )
+          :
+          (
+            <button className="msg-button" onClick={this.handleLeaveRoom}>Forget Room</button>
+          )
+          }
           </div>
         </div>
       );

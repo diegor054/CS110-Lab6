@@ -58,10 +58,8 @@ router.post('/join', async (req, res) => {
     // TODO: write necassary codes to delete a room
     // owner of that room when they want to delete it they send in this type of request
     // want to delete room and remove room from array of rooms in each user rooms array
-    router.post('/leave', async (req, res) => {
-        console.log("in leaveeeee")
+    router.post('/delete', async (req, res) => {
         const {roomID, roomName} = req.body;
-        console.log("roooomID" , roomID);
         const roomToLeave = await Room.findById(roomID);
         console.log(roomToLeave.users)
         
@@ -78,5 +76,23 @@ router.post('/join', async (req, res) => {
         await Room.deleteOne({_id: roomID});
         res.send({message: 'Room deleted successfully.'});
     });
+
+    router.post('/leave', async (req, res) => {
+        console.log("in leaveeeee")
+        const {roomID, roomName, userID} = req.body;
+        
+            let user = await User.findById(userID);
+            console.log(userID)
+            let roomIndex = user.rooms.indexOf(roomID);
+            console.log(user);
+            console.log(user.rooms.indexOf(roomID))
+            if (roomIndex > -1) {
+                user.rooms.splice(roomIndex, 1);
+                console.log("in here")
+                await user.save();
+            }
+        res.send({message: 'Room left successfully.'});
+    });
+
 
 module.exports = router;
