@@ -157,11 +157,11 @@ class Chatroom extends react.Component{
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "roomID": this.props.room._id, "roomName": this.props.room.name, "userID": this.props.user._id}),
+        body: JSON.stringify({ "roomID": this.props.room._id, "userID": this.props.user.userID}),
     })
     .then((res) => {
         res.json().then(data => {
-            this.setState({rooms:data, username: this.props.user.username, creator:this.props.room.creator});
+            //this.setState({rooms:data, username: this.props.user.username, creator:this.props.room.creator});
             //this.props.changeScreen("lobby"); 
             this.goBack();
         });
@@ -178,8 +178,8 @@ class Chatroom extends react.Component{
         },
     }).then((res) => {
         res.json().then(data => {
+          console.log("data in goBack", data)
           this.props.setRooms(data);
-          console.log("in chatooooom", data)
           this.props.changeScreen("lobby");
         });
     });

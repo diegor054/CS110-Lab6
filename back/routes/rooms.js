@@ -77,15 +77,26 @@ router.post('/join', async (req, res) => {
     });
 
     router.post('/leave', async (req, res) => {
-        const {roomID, roomName, userID} = req.body;
-        
+        const {roomID, userID} = req.body;
+            console.log("HEEEERE")
             let user = await User.findById(userID);
             let roomIndex = user.rooms.indexOf(roomID);
+            console.log(user);
+            console.log(roomIndex)
+            console.log(roomID, "roomID")
+            console.log(userID, "userID")
             if (roomIndex > -1) {
                 user.rooms.splice(roomIndex, 1);
+                console.log(user);
                 await user.save();
             }
-            await user.save();
+            //await user.save();
+            let room = await Room.findById(roomID);
+            let userIndex = room.users.indexOf(userID);
+            room.users.splice(userIndex, 1);
+            await room.save();
+   
+            const userRooms = await Room.find({users: req.session.userId});
         res.send({message: 'Room left successfully.', rooms:user.rooms});
     });
 
