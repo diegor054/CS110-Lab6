@@ -10,15 +10,14 @@ module.exports = router;
 
 //Get all the rooms
 router.get('/all', async (req, res) => {
-    // TODO: you have to check the database to only return the rooms that the user is in
+
     const userRooms = await Room.find({users: req.session.userId});
     res.send(userRooms);
 });
 
 
 router.post('/create', async(req, res) => {
-    // TODO: write necassary codesn to Create a new room
-    
+
     const { roomName } = req.body;
     let roomCode;
     let existingRoom;
@@ -53,11 +52,6 @@ router.post('/join', async (req, res) => {
     res.json({room:roomToJoin});
 });
     
-
-
-    // TODO: write necassary codes to delete a room
-    // owner of that room when they want to delete it they send in this type of request
-    // want to delete room and remove room from array of rooms in each user rooms array
     router.post('/delete', async (req, res) => {
         const {roomID, roomName} = req.body;
         const roomToLeave = await Room.findById(roomID);
@@ -78,16 +72,10 @@ router.post('/join', async (req, res) => {
 
     router.post('/leave', async (req, res) => {
         const {roomID, userID} = req.body;
-            console.log("HEEEERE")
             let user = await User.findById(userID);
             let roomIndex = user.rooms.indexOf(roomID);
-            console.log(user);
-            console.log(roomIndex)
-            console.log(roomID, "roomID")
-            console.log(userID, "userID")
             if (roomIndex > -1) {
                 user.rooms.splice(roomIndex, 1);
-                console.log(user);
                 await user.save();
             }
             //await user.save();
