@@ -55,9 +55,10 @@ class Lobby extends react.Component{
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ roomCode: this.state.joinRoomName }),
         })
-        .then((data) => {
-            this.routeToRoom(data);
-            console.log("routTo", data)
+        .then((res) => {
+            res.json().then((data) => {
+            this.routeToRoom(data.room); 
+            })
         });
     };
     
@@ -71,9 +72,7 @@ class Lobby extends react.Component{
         //.then((response) => response.json())
         .then((res) => {
             res.json().then((data) => {
-            console.log(data.room, "huhuhu")
-            this.routeToRoom(data.room);
-            
+            this.routeToRoom(data.room); 
         })
     });
     };

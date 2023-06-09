@@ -50,7 +50,7 @@ router.post('/join', async (req, res) => {
     await roomToJoin.save();
     req.user.rooms.push(roomToJoin._id);
     await req.user.save();
-    res.send(roomToJoin);
+    res.json({room:roomToJoin});
 });
     
 
