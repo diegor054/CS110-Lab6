@@ -19,7 +19,8 @@ router.get('/all', async (req, res) => {
 router.post('/create', async(req, res) => {
     // TODO: write necassary codesn to Create a new room
     
-    const { roomName } = req.body;let roomCode;
+    const { roomName } = req.body;
+    let roomCode;
     let existingRoom;
     do {
         roomCode = Math.floor(1000 + Math.random() * 9000);
@@ -34,7 +35,7 @@ router.post('/create', async(req, res) => {
     await newRoom.save();
     req.user.rooms.push(newRoom._id);
     await req.user.save();
-    res.send(newRoom);
+    res.json({room:newRoom});
 });
 
 

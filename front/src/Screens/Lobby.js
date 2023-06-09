@@ -20,6 +20,7 @@ class Lobby extends react.Component{
             room: '',
             screen: 'lobby',
             //creator: '',
+            createRoomName:''
         }
     }
 
@@ -55,7 +56,8 @@ class Lobby extends react.Component{
             body: JSON.stringify({ roomCode: this.state.joinRoomName }),
         })
         .then((data) => {
-            this.routeToRoom(data.name);
+            this.routeToRoom(data);
+            console.log("routTo", data)
         });
     };
     
@@ -66,10 +68,14 @@ class Lobby extends react.Component{
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ roomName: this.state.createRoomName }),
         })
-        .then((response) => response.json())
-        .then((data) => {
-            this.routeToRoom(data.name);
-        });
+        //.then((response) => response.json())
+        .then((res) => {
+            res.json().then((data) => {
+            console.log(data.room, "huhuhu")
+            this.routeToRoom(data.room);
+            
+        })
+    });
     };
     
     render(){
