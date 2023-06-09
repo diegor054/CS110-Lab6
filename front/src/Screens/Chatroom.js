@@ -186,8 +186,7 @@ class Chatroom extends react.Component{
     }
 
     render() { 
-      const isCreator = (this.props.user._id === this.props.room.creator);
-
+      const isCreator = (this.props.user.userID === this.props.room.creator);
       return (
         <div >
           <h2>Chatroom: {this.props.room.name}</h2>
@@ -206,14 +205,13 @@ class Chatroom extends react.Component{
               onChange={this.handleMessageChange}
             />
             <button className="msg-button" onClick={this.handleSendMessage}>Send</button>
-            <button className="msg-button" onClick={this.goBack}>Back</button>
+            <button className="msg-button" onClick={this.goBack}>Back To Lobby</button>
             {isCreator ? (
               <button className="msg-button" onClick={this.handleDeleteRoom}>Delete Room</button>
             )
           :
           (
-            //<button className="msg-button" onClick={this.handleLeaveRoom}>Forget Room</button>
-            <div/>
+            <button className="msg-button" onClick={this.handleLeaveRoom}>Forget Room</button>
           )
           }
           </div>
