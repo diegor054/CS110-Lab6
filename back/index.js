@@ -117,13 +117,11 @@ io.on('connection', (socket)=>{
   })
   socket.on("chat message", (data)=>{
     console.log("got the message", data)
-    console.log(room);
     io.to(room).emit("chat message", data)
   })
   socket.on("join", (data) => {
     socket.join(data.room);
     room = data.room;
-    userName = data.username;
     console.log(`socket: user ${data.username} is joined to room ${data.room}`);
   })
 

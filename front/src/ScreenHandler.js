@@ -17,10 +17,10 @@ class ScreenHandler extends react.Component{
             //username: '',
             room: '',
             screen: '',
-            code: '',
+            //code: '',
             //creator: '',
-            creatorOfRoom: '',
-            roomID:'',
+            //creatorOfRoom: '',
+            //roomID:'',
             user: {
                     userName: '',
                     userID: '',
@@ -61,6 +61,7 @@ class ScreenHandler extends react.Component{
         console.log("setRoom: ", this.state.room);
 
     }
+    /*
     setCode = (code) => {
         this.setState({code:code});
         console.log("setCode: ", this.state.code);
@@ -73,6 +74,7 @@ class ScreenHandler extends react.Component{
     setRoomID = (rid) => {
         this.setState({roomID: rid});
     }
+    */
 
     setUser = (u) => {
         let newUser = {
@@ -116,10 +118,10 @@ class ScreenHandler extends react.Component{
                 this.changeScreen("auth"); 
                 display = <Auth server_url = {server_url} changeScreen={this.changeScreen} setUser={this.setUser}/>;
             }
-            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} setCode={this.setCode} setCreatorOfRoom={this.setCreatorOfRoom} setRoomID={this.setRoomID} user={this.state.user}/>;
+            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} user={this.state.user}/>;
         }
         else if (this.state.screen === "chatroom"){
-            display = <Chatroom server_url = {server_url} changeScreen={this.changeScreen} room={this.state.room} username={this.state.username} code={this.state.code} creator={this.state.creator} roomCreator={this.state.creatorOfRoom} roomID={this.state.roomID} roomName={this.state.room}/>;
+            display = <Chatroom server_url = {server_url} changeScreen={this.changeScreen} room={this.state.room} user={this.state.user}/>;
         }
         return( 
             <div>

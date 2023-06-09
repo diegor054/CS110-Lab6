@@ -15,10 +15,6 @@ class Chatroom extends react.Component{
         messages: [],
         text: "",
         message: "",
-        userId: "",
-        roomCreator: '',
-        roomID: '',
-        roomName: '',
       };
       
       this.socket.on("chat message", (data) => {
@@ -35,20 +31,15 @@ class Chatroom extends react.Component{
     };
   
     componentDidMount = (data) => {
-      ("chatroom mount: "); 
-      this.socket.emit("join", {"room": this.props.room, "username": this.props.username});
+      this.socket.emit("join", {"room": this.props.room.name, "username": this.props.user.userName});
       // Get initial message history from the db
-      this.setState({userId: this.props.creator});
-      this.setState({roomCreator: this.props.roomCreator});
-      this.setState({roomID: this.props.roomID});
-      this.setState({roomID: this.props.roomName});
       this.fetchMessages();
       // Start long polling to check for new messages periodically
       this.startLongPolling();
     }
 
     fetchMessages() {
-      fetch(this.props.server_url + '/api/messages/' + this.props.room, {
+      fetch(this.props.server_url + '/api/messages/' + this.props.room.name, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -78,7 +69,7 @@ class Chatroom extends react.Component{
         this.isPolling = true; // Set the flag to indicate that a request is now in progress
   
         const lastMessageCount = this.state.messages.length;
-        const url = `${this.props.server_url}/api/messages/check/${this.props.room}?lastMessageCount=${lastMessageCount}`;
+        const url = `${this.props.server_url}/api/messages/check/${this.props.room.name}?lastMessageCount=${lastMessageCount}`;
   
         fetch(url, {
           method: "GET",
@@ -118,12 +109,10 @@ class Chatroom extends react.Component{
     }
 
     handleSendMessage = () => {
-      const { message } = this.state;
-      const {username, room} = this.props;
       const data = {
-        username: username,
-        room: room,
-        message: message
+        username: this.props.user.userName,
+        room: this.props.room.name,
+        message: this.state.message
       }
       this.socket.emit("chat message", data);
       this.setState({ message: "" });
@@ -150,18 +139,12 @@ class Chatroom extends react.Component{
     });
     };    
 
-    /*
-    handleDeleteRoom = () => {
-      this.socket.emit("delete room", this.props.room);
-    }
-    */
-
     handleDeleteRoom = () => {
       fetch(this.props.server_url + '/api/rooms/delete', {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ "roomID": this.props.roomID, "roomName": this.props.roomName}),
+          body: JSON.stringify({ "roomID": this.props.room._id, "roomName": this.props.room.name}),
       })
       .then((data) => {
          this.props.changeScreen("lobby");
@@ -173,11 +156,11 @@ class Chatroom extends react.Component{
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "roomID": this.props.roomID, "roomName": this.props.roomName, "userID": this.props.creator}),
+        body: JSON.stringify({ "roomID": this.props.room._id, "roomName": this.props.room.name, "userID": this.props.user._id}),
     })
     .then((res) => {
         res.json().then(data => {
-            this.setState({rooms:data, username: this.props.username, creator:this.props.creator});
+            this.setState({rooms:data, username: this.props.user.username, creator:this.props.room.creator});
             this.props.changeScreen("lobby"); 
         });
     });
@@ -189,12 +172,12 @@ class Chatroom extends react.Component{
     }
 
     render() { 
-      const isCreator = (this.state.userId === this.state.roomCreator);
+      const isCreator = (this.props.user._id === this.props.room.creator);
 
       return (
         <div >
-          <h2>Chatroom: {this.props.room}</h2>
-          <h3>Invite friends with this code: {this.props.code}</h3>
+          <h2>Chatroom: {this.props.room.name}</h2>
+          <h3>Invite friends with this code: {this.props.room.code}</h3>
           <div className="msg-container">
             {/* Show chats */}
             {this.state.messages.map((message, index) => (
