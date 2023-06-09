@@ -115,6 +115,7 @@ router.post('/login', async (req, res) => {
       req.user = user;
       const userRooms = await Room.find({users: user._id})
       user.rooms = userRooms;
+      console.log("auth user", user)
       res.json({ msg: "logged in",user:user});
     }
 });
@@ -133,6 +134,7 @@ router.post('/signup',  async (req, res)=>{
       username: username,
       password: password,
       name: name,
+      pfp: null
   })
   //console.log(user + "created")
   //let usernameTaken = await User.findOne({ username });
@@ -149,5 +151,16 @@ router.post('/signup',  async (req, res)=>{
     }
   }
 })
+
+
+router.post('/editPFP', async (req, res) => {
+  // TODO: write necassary codes to join a new room
+  const { newProfilePic, username } = req.body;
+  const user = await User.findOne({ username });
+  console.log(user, "user found ")
+  user.pfp = newProfilePic;
+  console.log(user, "editpfp")
+  await user.save();
+});
 
 // write the edit webpage function here (change profile?)

@@ -19,6 +19,7 @@ class ScreenHandler extends react.Component{
                     userID: '',
                     rooms: [],
                     nameOfUser: '',
+                    pfp: '',
             }
         }
     }
@@ -56,12 +57,27 @@ class ScreenHandler extends react.Component{
         this.state.user.rooms = rs;
     }
 
+    setPFP = (p) => {
+        this.state.user.pfp = p;
+        fetch(server_url + '/api/auth/editPFP', {
+            method: "POST",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ newProfilePic: p, username: this.state.user.userName }),
+        })
+    }
+
     setUser = (u) => {
         let newUser = {
             userName: u.username,
             userID: u._id,
             rooms: u.rooms,
             nameOfUser: u.name,
+            pfp: u.pfp
         }
         this.setState({user: newUser})
     }
@@ -98,7 +114,7 @@ class ScreenHandler extends react.Component{
                 this.changeScreen("auth"); 
                 display = <Auth server_url = {server_url} changeScreen={this.changeScreen} setUser={this.setUser}/>;
             }
-            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} user={this.state.user}/>;
+            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} user={this.state.user} setPFP={this.setPFP}/>;
         }
         else if (this.state.screen === "chatroom"){
             display = <Chatroom server_url = {server_url} changeScreen={this.changeScreen} room={this.state.room} user={this.state.user} setRooms={this.setRooms}/>;

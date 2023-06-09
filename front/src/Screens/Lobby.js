@@ -17,7 +17,8 @@ class Lobby extends react.Component{
             rooms: undefined,
             room: '',
             screen: 'lobby',
-            createRoomName:''
+            createRoomName:'',
+            profilePic: ''
         }
     }
 
@@ -32,6 +33,7 @@ class Lobby extends react.Component{
         }).then((res) => {
             res.json().then(data => {
                 this.setState({rooms:data})
+                this.setState({profilePic:this.props.user.pfp})
                 console.log("Component Mount in Lobby (User Data): ", this.props.user)
             });
         });
@@ -70,6 +72,28 @@ class Lobby extends react.Component{
         })
     });
     };
+
+    handleImageChange = async (event) => {
+        const f = event.target.files[0];
+        const b64 = await this.convertToBase64(f);
+        this.props.setPFP(b64);
+        this.setState({profilePic:b64})
+        
+    };
+ 
+    convertToBase64 = (file) => { //used to convert to readable format w
+        return new Promise((res, rej) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                res(reader.result);
+            };
+            reader.onerror = (error) => {
+                rej(error);
+            }; 
+            });
+    };
+
     
     render(){
         return(
@@ -95,7 +119,17 @@ class Lobby extends react.Component{
                     <div style={{width:"30%", height:"100%", border:"solid  #e6ecf0", marginLeft: "70px"}}>
                         <div style={{textAlign: "center", borderBottom:"solid  #e6ecf0"}}><h3>My Profile</h3></div>
                         <div style={{margin:"20px", border:"solid #e6ecf0", width: "110px"}}>
-                            <img src={DefaultPfp} alt="ProfilePic." style={{objectFit: "contain", height:"100px", width:"100px"}} />
+                        {this.state.profilePic === null ? (
+                        <img src={DefaultPfp} alt="ProfilePic." style={{objectFit: "contain", height:"100px", width:"100px"}} />
+                        )
+                        :
+                        (
+                            <img src={this.state.profilePic} alt="ProfilePic." style={{objectFit: "contain", height:"100px", width:"100px"}} />
+                        )
+                        }
+                        </div>
+                        <div style={{paddingLeft: "5px"}} >
+                        <input type="file"  onChange={this.handleImageChange} />
                         </div>
                         <div style={{paddingLeft:"5px"}}><h4>Name: {this.props.user.nameOfUser}</h4></div>
                         <div style={{paddingLeft:"5px"}}><h4>Username: {this.props.user.userName}</h4></div>
