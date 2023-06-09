@@ -170,7 +170,6 @@ class Chatroom extends react.Component{
 };
 
     goBack = () => {
-      this.props.changeScreen("lobby");
       fetch(this.props.server_url + '/api/rooms/all', {
         method: "GET",
         credentials: "include",
@@ -181,6 +180,7 @@ class Chatroom extends react.Component{
         res.json().then(data => {
           this.props.setRooms(data);
           console.log("in chatooooom", data)
+          this.props.changeScreen("lobby");
         });
     });
     }
