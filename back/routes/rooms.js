@@ -19,7 +19,8 @@ router.get('/all', async (req, res) => {
 router.post('/create', async(req, res) => {
     // TODO: write necassary codesn to Create a new room
     
-    const { roomName } = req.body;let roomCode;
+    const { roomName } = req.body;
+    let roomCode;
     let existingRoom;
     do {
         roomCode = Math.floor(1000 + Math.random() * 9000);
@@ -34,14 +35,13 @@ router.post('/create', async(req, res) => {
     await newRoom.save();
     req.user.rooms.push(newRoom._id);
     await req.user.save();
-    res.send(newRoom);
+    res.json({room:newRoom});
 });
 
 
 router.post('/join', async (req, res) => {
     // TODO: write necassary codes to join a new room
     const { roomCode } = req.body;
-    console.log("IN JOIN")
     const roomToJoin = await Room.findOne({code: roomCode});
     if (!roomToJoin) {
         return res.status(404).send({message: 'Room does not exist.'});
@@ -50,7 +50,7 @@ router.post('/join', async (req, res) => {
     await roomToJoin.save();
     req.user.rooms.push(roomToJoin._id);
     await req.user.save();
-    res.send(roomToJoin);
+    res.json({room:roomToJoin});
 });
     
 
@@ -61,7 +61,6 @@ router.post('/join', async (req, res) => {
     router.post('/delete', async (req, res) => {
         const {roomID, roomName} = req.body;
         const roomToLeave = await Room.findById(roomID);
-        console.log(roomToLeave.users)
         
         for (let userId of roomToLeave.users) {
             let user = await User.findById(userId);
@@ -78,20 +77,26 @@ router.post('/join', async (req, res) => {
     });
 
     router.post('/leave', async (req, res) => {
-        console.log("in leaveeeee")
-        const {roomID, roomName, userID} = req.body;
-        
+        const {roomID, userID} = req.body;
+            console.log("HEEEERE")
             let user = await User.findById(userID);
-            console.log(userID)
             let roomIndex = user.rooms.indexOf(roomID);
             console.log(user);
-            console.log(user.rooms.indexOf(roomID))
+            console.log(roomIndex)
+            console.log(roomID, "roomID")
+            console.log(userID, "userID")
             if (roomIndex > -1) {
                 user.rooms.splice(roomIndex, 1);
-                console.log("in here")
+                console.log(user);
                 await user.save();
             }
-            await user.save();
+            //await user.save();
+            let room = await Room.findById(roomID);
+            let userIndex = room.users.indexOf(userID);
+            room.users.splice(userIndex, 1);
+            await room.save();
+   
+            const userRooms = await Room.find({users: req.session.userId});
         res.send({message: 'Room left successfully.', rooms:user.rooms});
     });
 

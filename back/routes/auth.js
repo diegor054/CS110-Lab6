@@ -93,6 +93,7 @@ module.exports = router;
 
 const express = require('express');
 const User = require('../model/user');
+const Room = require('../model/room');  // assuming you have a Room model
 const router = express.Router()
 
 module.exports = router;
@@ -112,7 +113,10 @@ router.post('/login', async (req, res) => {
       session.authenticated = true;
       session.userId = user._id;
       req.user = user;
-      res.json({ msg: "logged in",user:username, status: true, creator:session.userId, });
+      const userRooms = await Room.find({users: user._id})
+      user.rooms = userRooms;
+      console.log("NEWWWW", user);
+      res.json({ msg: "logged in",user:user});
     }
 });
 

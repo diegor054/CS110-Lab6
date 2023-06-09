@@ -16,10 +16,11 @@ class Lobby extends react.Component{
         });
         this.state = {
             rooms: undefined,
-            username: '',
+            //username: '',
             room: '',
             screen: 'lobby',
-            creator: '',
+            //creator: '',
+            createRoomName:''
         }
     }
 
@@ -33,21 +34,16 @@ class Lobby extends react.Component{
             },
         }).then((res) => {
             res.json().then(data => {
-                console.log("data:",data);
-                this.setState({rooms:data, username: this.props.username, creator:this.props.creator}); 
-                console.log("creeeeeator: ", this.state.creator)
+                this.setState({rooms:data})
+                console.log("hooooooooo", this.props.user)
             });
         });
     }  
-    routeToRoom(room, code,creator, id) {
-        console.log("route to room: room, username, rooms"); 
-        console.log(room, this.state.username, this.state.rooms);
+    routeToRoom(room) {
         this.props.changeScreen("chatroom");
-        this.props.setRoomID(id);
         this.props.setRoom(room);
-        this.props.setCode(code); 
-        this.props.setCreatorOfRoom(creator)
-        this.socket.emit("join", {"room":room, "username":this.state.username, "creator":this.state.creator});
+        console.log("route to route ", room)
+        this.socket.emit("join", {"room":room.name, "username":this.props.user.username, "creator":room.creator});
         this.setState({room: room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
     }
 
@@ -58,9 +54,10 @@ class Lobby extends react.Component{
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ roomCode: this.state.joinRoomName }),
         })
-        .then((data) => {
-            this.routeToRoom(data.name);
-            console.log("FETCH LOBBY JOIN") 
+        .then((res) => {
+            res.json().then((data) => {
+            this.routeToRoom(data.room); 
+            })
         });
     };
     
@@ -71,23 +68,25 @@ class Lobby extends react.Component{
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ roomName: this.state.createRoomName }),
         })
-        .then((response) => response.json())
-        .then((data) => {
-            this.routeToRoom(data.name);
-        });
+        //.then((response) => response.json())
+        .then((res) => {
+            res.json().then((data) => {
+            this.routeToRoom(data.room); 
+        })
+    });
     };
     
     render(){
         return(
             <div>
                 <h1>Lobby</h1>
-                <h2>Welcome {this.state.username}!</h2>
+                <h2>Welcome {this.props.user.userName}!</h2>
                 <div className="room-buttons">
-                {this.state.rooms ? this.state.rooms.map((room) => {
+                {this.props.user.rooms ? this.props.user.rooms.map((room) => {
                     return <Button variant="contained" key={room._id} 
                     onClick={() => 
                         {
-                            this.routeToRoom(room.name, room.code, room.creator, room._id);
+                            this.routeToRoom(room);
                         }
                     } >
                         <div className="room-button">

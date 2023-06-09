@@ -15,10 +15,6 @@ class Chatroom extends react.Component{
         messages: [],
         text: "",
         message: "",
-        userId: "",
-        roomCreator: '',
-        roomID: '',
-        roomName: '',
       };
       
       this.socket.on("chat message", (data) => {
@@ -35,27 +31,21 @@ class Chatroom extends react.Component{
     };
   
     componentDidMount = (data) => {
-      console.log("chatroom mount: ", this.props.room, this.props.username, this.props.creator, this.props.code); 
-      this.socket.emit("join", {"room": this.props.room, "username": this.props.username});
+      this.socket.emit("join", {"room": this.props.room.name, "username": this.props.user.userName});
       // Get initial message history from the db
-      this.setState({userId: this.props.creator});
-      this.setState({roomCreator: this.props.roomCreator});
-      this.setState({roomID: this.props.roomID});
-      this.setState({roomID: this.props.roomName});
       this.fetchMessages();
       // Start long polling to check for new messages periodically
       this.startLongPolling();
     }
 
     fetchMessages() {
-      fetch(this.props.server_url + '/api/messages/' + this.props.room, {
+      fetch(this.props.server_url + '/api/messages/' + this.props.room.name, {
         method: "GET",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
       }).then((res) => {
-        console.log("pulled messages from db");
         res.json().then(data => {
           this.setState({ messages: data });
           //this.setState({rooms:data, username: this.props.username}); 
@@ -79,7 +69,7 @@ class Chatroom extends react.Component{
         this.isPolling = true; // Set the flag to indicate that a request is now in progress
   
         const lastMessageCount = this.state.messages.length;
-        const url = `${this.props.server_url}/api/messages/check/${this.props.room}?lastMessageCount=${lastMessageCount}`;
+        const url = `${this.props.server_url}/api/messages/check/${this.props.room.name}?lastMessageCount=${lastMessageCount}`;
   
         fetch(url, {
           method: "GET",
@@ -96,7 +86,6 @@ class Chatroom extends react.Component{
             }
           })
           .then((data) => {
-            console.log("data in poll: ", data.newMessages);
             if (data.newMessages) {
               // New messages are available, so fetch and update the message list
               this.fetchMessages();
@@ -117,16 +106,13 @@ class Chatroom extends react.Component{
 
     componentWillUnmount() {
       clearTimeout(this.pollingTimeout);
-      console.log("CHATROOM UNMOUNT");
     }
 
     handleSendMessage = () => {
-      const { message } = this.state;
-      const {username, room} = this.props;
       const data = {
-        username: username,
-        room: room,
-        message: message
+        username: this.props.user.userName,
+        room: this.props.room.name,
+        message: this.state.message
       }
       this.socket.emit("chat message", data);
       this.setState({ message: "" });
@@ -141,7 +127,6 @@ class Chatroom extends react.Component{
         body: JSON.stringify(data),
     }).then((res) => {
         res.json().then((data) => {
-            console.log(data.status)
             if (data.status === 200) {
                 //alert("Account created");
                 //this.props.changeScreen("lobby");
@@ -154,21 +139,16 @@ class Chatroom extends react.Component{
     });
     };    
 
-    /*
-    handleDeleteRoom = () => {
-      this.socket.emit("delete room", this.props.room);
-    }
-    */
-
     handleDeleteRoom = () => {
       fetch(this.props.server_url + '/api/rooms/delete', {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ "roomID": this.props.roomID, "roomName": this.props.roomName}),
+          body: JSON.stringify({ "roomID": this.props.room._id, "roomName": this.props.room.name}),
       })
       .then((data) => {
-         this.props.changeScreen("lobby");
+         //this.props.changeScreen("lobby");
+         this.goBack();
       });
   };
 
@@ -177,32 +157,40 @@ class Chatroom extends react.Component{
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "roomID": this.props.roomID, "roomName": this.props.roomName, "userID": this.props.creator}),
+        body: JSON.stringify({ "roomID": this.props.room._id, "userID": this.props.user.userID}),
     })
     .then((res) => {
         res.json().then(data => {
-            this.setState({rooms:data, username: this.props.username, creator:this.props.creator});
-            console.log(data.rooms, "THTHHTHTHTH")
-            this.props.changeScreen("lobby"); 
+            //this.setState({rooms:data, username: this.props.user.username, creator:this.props.room.creator});
+            //this.props.changeScreen("lobby"); 
+            this.goBack();
         });
     });
 
 };
 
     goBack = () => {
-      this.props.changeScreen("lobby");
+      fetch(this.props.server_url + '/api/rooms/all', {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((res) => {
+        res.json().then(data => {
+          console.log("data in goBack", data)
+          this.props.setRooms(data);
+          this.props.changeScreen("lobby");
+        });
+    });
     }
 
-    render() {
-      console.log("UserId: ", this.state.userId);
-      console.log("Creator: ", this.state.roomCreator); 
-      const isCreator = (this.state.userId === this.state.roomCreator);
-      console.log("Render props: ", this.props.room, this.props.username, this.props.creator, this.props.code, isCreator);
-
+    render() { 
+      const isCreator = (this.props.user.userID === this.props.room.creator);
       return (
         <div >
-          <h2>Chatroom: {this.props.room}</h2>
-          <h3>Invite friends with this code: {this.props.code}</h3>
+          <h2>Chatroom: {this.props.room.name}</h2>
+          <h3>Invite friends with this code: {this.props.room.code}</h3>
           <div className="msg-container">
             {/* Show chats */}
             {this.state.messages.map((message, index) => (
@@ -217,14 +205,13 @@ class Chatroom extends react.Component{
               onChange={this.handleMessageChange}
             />
             <button className="msg-button" onClick={this.handleSendMessage}>Send</button>
-            <button className="msg-button" onClick={this.goBack}>Back</button>
+            <button className="msg-button" onClick={this.goBack}>Back To Lobby</button>
             {isCreator ? (
               <button className="msg-button" onClick={this.handleDeleteRoom}>Delete Room</button>
             )
           :
           (
-            //<button className="msg-button" onClick={this.handleLeaveRoom}>Forget Room</button>
-            <div/>
+            <button className="msg-button" onClick={this.handleLeaveRoom}>Forget Room</button>
           )
           }
           </div>
