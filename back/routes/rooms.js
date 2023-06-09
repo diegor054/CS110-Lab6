@@ -41,7 +41,6 @@ router.post('/create', async(req, res) => {
 router.post('/join', async (req, res) => {
     // TODO: write necassary codes to join a new room
     const { roomCode } = req.body;
-    console.log("IN JOIN")
     const roomToJoin = await Room.findOne({code: roomCode});
     if (!roomToJoin) {
         return res.status(404).send({message: 'Room does not exist.'});
@@ -61,7 +60,6 @@ router.post('/join', async (req, res) => {
     router.post('/delete', async (req, res) => {
         const {roomID, roomName} = req.body;
         const roomToLeave = await Room.findById(roomID);
-        console.log(roomToLeave.users)
         
         for (let userId of roomToLeave.users) {
             let user = await User.findById(userId);
@@ -78,17 +76,12 @@ router.post('/join', async (req, res) => {
     });
 
     router.post('/leave', async (req, res) => {
-        console.log("in leaveeeee")
         const {roomID, roomName, userID} = req.body;
         
             let user = await User.findById(userID);
-            console.log(userID)
             let roomIndex = user.rooms.indexOf(roomID);
-            console.log(user);
-            console.log(user.rooms.indexOf(roomID))
             if (roomIndex > -1) {
                 user.rooms.splice(roomIndex, 1);
-                console.log("in here")
                 await user.save();
             }
             await user.save();

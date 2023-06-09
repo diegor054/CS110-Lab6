@@ -132,10 +132,8 @@ class Auth extends react.Component{
             res.json().then((data) => {
                 if (data.msg === "logged in") {
                     //this.setState({screen: "lobby"});
+                    this.props.setUser(data.user)
                     this.props.changeScreen("lobby");
-                    console.log("this is my data", data.creator)
-                    this.props.setCreator(data.creator);
-                    this.props.setUsername(data.user)
                 }
                 else {
                     alert(data.msg);
@@ -156,7 +154,6 @@ class Auth extends react.Component{
             body: JSON.stringify(data),
         }).then((res) => {
             res.json().then((data) => {
-                console.log(data.status)
                 if (data.status === 200) {
                     alert("Account created");
                     //this.props.changeScreen("lobby");
@@ -165,7 +162,6 @@ class Auth extends react.Component{
                     if(data.msg === undefined){
                         alert("Username not available.")
                     }else{
-                    console.log("failed")
                     alert(data.msg);
                     }
                 }

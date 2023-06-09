@@ -35,7 +35,7 @@ class Chatroom extends react.Component{
     };
   
     componentDidMount = (data) => {
-      console.log("chatroom mount: ", this.props.room, this.props.username, this.props.creator, this.props.code); 
+      ("chatroom mount: "); 
       this.socket.emit("join", {"room": this.props.room, "username": this.props.username});
       // Get initial message history from the db
       this.setState({userId: this.props.creator});
@@ -55,7 +55,6 @@ class Chatroom extends react.Component{
           "Content-Type": "application/json",
         },
       }).then((res) => {
-        console.log("pulled messages from db");
         res.json().then(data => {
           this.setState({ messages: data });
           //this.setState({rooms:data, username: this.props.username}); 
@@ -96,7 +95,6 @@ class Chatroom extends react.Component{
             }
           })
           .then((data) => {
-            console.log("data in poll: ", data.newMessages);
             if (data.newMessages) {
               // New messages are available, so fetch and update the message list
               this.fetchMessages();
@@ -117,7 +115,6 @@ class Chatroom extends react.Component{
 
     componentWillUnmount() {
       clearTimeout(this.pollingTimeout);
-      console.log("CHATROOM UNMOUNT");
     }
 
     handleSendMessage = () => {
@@ -141,7 +138,6 @@ class Chatroom extends react.Component{
         body: JSON.stringify(data),
     }).then((res) => {
         res.json().then((data) => {
-            console.log(data.status)
             if (data.status === 200) {
                 //alert("Account created");
                 //this.props.changeScreen("lobby");
@@ -182,7 +178,6 @@ class Chatroom extends react.Component{
     .then((res) => {
         res.json().then(data => {
             this.setState({rooms:data, username: this.props.username, creator:this.props.creator});
-            console.log(data.rooms, "THTHHTHTHTH")
             this.props.changeScreen("lobby"); 
         });
     });
@@ -193,11 +188,8 @@ class Chatroom extends react.Component{
       this.props.changeScreen("lobby");
     }
 
-    render() {
-      console.log("UserId: ", this.state.userId);
-      console.log("Creator: ", this.state.roomCreator); 
+    render() { 
       const isCreator = (this.state.userId === this.state.roomCreator);
-      console.log("Render props: ", this.props.room, this.props.username, this.props.creator, this.props.code, isCreator);
 
       return (
         <div >

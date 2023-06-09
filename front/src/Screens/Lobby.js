@@ -16,10 +16,10 @@ class Lobby extends react.Component{
         });
         this.state = {
             rooms: undefined,
-            username: '',
+            //username: '',
             room: '',
             screen: 'lobby',
-            creator: '',
+            //creator: '',
         }
     }
 
@@ -34,20 +34,18 @@ class Lobby extends react.Component{
         }).then((res) => {
             res.json().then(data => {
                 console.log("data:",data);
-                this.setState({rooms:data, username: this.props.username, creator:this.props.creator}); 
-                console.log("creeeeeator: ", this.state.creator)
+                this.setState({rooms:data})
+                console.log("hooooooooo", this.props.user)
             });
         });
     }  
     routeToRoom(room, code,creator, id) {
-        console.log("route to room: room, username, rooms"); 
-        console.log(room, this.state.username, this.state.rooms);
         this.props.changeScreen("chatroom");
         this.props.setRoomID(id);
         this.props.setRoom(room);
         this.props.setCode(code); 
         this.props.setCreatorOfRoom(creator)
-        this.socket.emit("join", {"room":room, "username":this.state.username, "creator":this.state.creator});
+        this.socket.emit("join", {"room":room, "username":this.props.user.username, "creator":this.state.creator});
         this.setState({room: room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
     }
 
@@ -60,7 +58,6 @@ class Lobby extends react.Component{
         })
         .then((data) => {
             this.routeToRoom(data.name);
-            console.log("FETCH LOBBY JOIN") 
         });
     };
     
@@ -81,9 +78,9 @@ class Lobby extends react.Component{
         return(
             <div>
                 <h1>Lobby</h1>
-                <h2>Welcome {this.state.username}!</h2>
+                <h2>Welcome {this.props.user.userName}!</h2>
                 <div className="room-buttons">
-                {this.state.rooms ? this.state.rooms.map((room) => {
+                {this.props.user.rooms ? this.props.user.rooms.map((room) => {
                     return <Button variant="contained" key={room._id} 
                     onClick={() => 
                         {

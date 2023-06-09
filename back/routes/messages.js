@@ -22,7 +22,6 @@ router.post('/',  async (req, res)=>{
         room: room,
         message: message,
     })
-    console.log(newMessage + "created")
     try{
         const dataSaved = await newMessage.save();
         res.status(200).json({dataSaved, status: 200});
@@ -41,8 +40,6 @@ router.get('/check/:room', async (req, res) => {
       const messageCount = await Messages.countDocuments(query);
   
       const newMessageCount = messageCount - lastMessageCount;
-      console.log(messageCount);
-      console.log(lastMessageCount);
       const hasNewMessages = newMessageCount !== 0;
   
       res.status(200).json({ newMessages: hasNewMessages, messageCount });
