@@ -59,7 +59,10 @@ class ScreenHandler extends react.Component{
     setRoom = (r) => {
         this.setState({room:r});
         console.log("setRoom: ", this.state.room);
+    }
 
+    setRooms = (rs) => {
+        this.state.user.rooms = rs;
     }
     /*
     setCode = (code) => {
@@ -121,7 +124,7 @@ class ScreenHandler extends react.Component{
             display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} user={this.state.user}/>;
         }
         else if (this.state.screen === "chatroom"){
-            display = <Chatroom server_url = {server_url} changeScreen={this.changeScreen} room={this.state.room} user={this.state.user}/>;
+            display = <Chatroom server_url = {server_url} changeScreen={this.changeScreen} room={this.state.room} user={this.state.user} setRooms={this.setRooms}/>;
         }
         return( 
             <div>

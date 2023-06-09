@@ -147,7 +147,8 @@ class Chatroom extends react.Component{
           body: JSON.stringify({ "roomID": this.props.room._id, "roomName": this.props.room.name}),
       })
       .then((data) => {
-         this.props.changeScreen("lobby");
+         //this.props.changeScreen("lobby");
+         this.goBack();
       });
   };
 
@@ -161,7 +162,8 @@ class Chatroom extends react.Component{
     .then((res) => {
         res.json().then(data => {
             this.setState({rooms:data, username: this.props.user.username, creator:this.props.room.creator});
-            this.props.changeScreen("lobby"); 
+            //this.props.changeScreen("lobby"); 
+            this.goBack();
         });
     });
 
@@ -169,6 +171,18 @@ class Chatroom extends react.Component{
 
     goBack = () => {
       this.props.changeScreen("lobby");
+      fetch(this.props.server_url + '/api/rooms/all', {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((res) => {
+        res.json().then(data => {
+          this.props.setRooms(data);
+          console.log("in chatooooom", data)
+        });
+    });
     }
 
     render() { 
