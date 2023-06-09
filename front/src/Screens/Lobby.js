@@ -118,13 +118,13 @@ class Lobby extends react.Component{
                     </div>
                     <div style={{width:"30%", height:"100%", border:"solid  #e6ecf0", marginLeft: "70px"}}>
                         <div style={{textAlign: "center", borderBottom:"solid  #e6ecf0"}}><h3>My Profile</h3></div>
-                        <div style={{margin:"20px", border:"solid #e6ecf0", width: "110px"}}>
+                        <div >
                         {this.state.profilePic === null ? (
-                        <img src={DefaultPfp} alt="ProfilePic." style={{objectFit: "contain", height:"100px", width:"100px"}} />
+                        <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
                         )
                         :
                         (
-                            <img src={this.state.profilePic} alt="ProfilePic." style={{objectFit: "contain", height:"100px", width:"100px"}} />
+                            <img src={this.state.profilePic} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
                         )
                         }
                         </div>
