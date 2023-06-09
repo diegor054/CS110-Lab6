@@ -1,6 +1,7 @@
 import react from "react";
 import { Button, TextField } from "@mui/material";
 import {io} from 'socket.io-client';
+import DefaultPfp from "./../default-pfp.jpg"
 import './screens.css'; 
 
 class Lobby extends react.Component{
@@ -93,8 +94,8 @@ class Lobby extends react.Component{
                     </div>
                     <div style={{width:"30%", height:"100%", border:"solid  #e6ecf0", marginLeft: "70px"}}>
                         <div style={{textAlign: "center", borderBottom:"solid  #e6ecf0"}}><h3>My Profile</h3></div>
-                        <div style={{margin:"20px", border:"solid #e6ecf0", height:"100px", width:"100px"}}>
-                          rr
+                        <div style={{margin:"20px", border:"solid #e6ecf0", width: "110px"}}>
+                            <img src={DefaultPfp} alt="ProfilePic." style={{objectFit: "contain", height:"100px", width:"100px"}} />
                         </div>
                         <div style={{paddingLeft:"5px"}}><h4>Name: {this.props.user.nameOfUser}</h4></div>
                         <div style={{paddingLeft:"5px"}}><h4>Username: {this.props.user.userName}</h4></div>
