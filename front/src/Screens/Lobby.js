@@ -3,8 +3,6 @@ import { Button, TextField } from "@mui/material";
 import {io} from 'socket.io-client';
 import './screens.css'; 
 
-
-
 class Lobby extends react.Component{
     constructor(props){
         super(props);
@@ -16,10 +14,8 @@ class Lobby extends react.Component{
         });
         this.state = {
             rooms: undefined,
-            //username: '',
             room: '',
             screen: 'lobby',
-            //creator: '',
             createRoomName:''
         }
     }
@@ -35,14 +31,13 @@ class Lobby extends react.Component{
         }).then((res) => {
             res.json().then(data => {
                 this.setState({rooms:data})
-                console.log("hooooooooo", this.props.user)
+                console.log("Component Mount in Lobby (User Data): ", this.props.user)
             });
         });
     }  
     routeToRoom(room) {
         this.props.changeScreen("chatroom");
         this.props.setRoom(room);
-        console.log("route to route ", room)
         this.socket.emit("join", {"room":room.name, "username":this.props.user.username, "creator":room.creator});
         this.setState({room: room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
     }
@@ -68,7 +63,6 @@ class Lobby extends react.Component{
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ roomName: this.state.createRoomName }),
         })
-        //.then((response) => response.json())
         .then((res) => {
             res.json().then((data) => {
             this.routeToRoom(data.room); 
@@ -112,9 +106,6 @@ class Lobby extends react.Component{
                     />
                     <Button variant="contained" onClick={this.handleCreateRoom}>Create Room</Button>
                 </div> 
-                {/* write codes to join a new room using room id*/}
-                {/* write codes to enable user to create a new room*/}
-                
             </div>
         );
     }

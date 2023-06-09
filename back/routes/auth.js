@@ -115,7 +115,6 @@ router.post('/login', async (req, res) => {
       req.user = user;
       const userRooms = await Room.find({users: user._id})
       user.rooms = userRooms;
-      console.log("NEWWWW", user);
       res.json({ msg: "logged in",user:user});
     }
 });

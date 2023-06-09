@@ -7,20 +7,13 @@ import "./Screens/screens.css";
 
 const server_url = "http://localhost:3001";
 
-
 class ScreenHandler extends react.Component{
     constructor(props){
         super(props);
 
         this.state = {
-            //rooms: undefined,
-            //username: '',
             room: '',
             screen: '',
-            //code: '',
-            //creator: '',
-            //creatorOfRoom: '',
-            //roomID:'',
             user: {
                     userName: '',
                     userID: '',
@@ -53,31 +46,15 @@ class ScreenHandler extends react.Component{
 
     changeScreen = (screen) => {
         this.setState({screen: screen});
-        console.log("changeScreen: ", this.state.screen);
     }
 
     setRoom = (r) => {
         this.setState({room:r});
-        console.log("setRoom: ", this.state.room);
     }
 
     setRooms = (rs) => {
         this.state.user.rooms = rs;
     }
-    /*
-    setCode = (code) => {
-        this.setState({code:code});
-        console.log("setCode: ", this.state.code);
-    }
-
-    setCreatorOfRoom = (cor) => {
-        this.setState({creatorOfRoom:cor});
-    }
-
-    setRoomID = (rid) => {
-        this.setState({roomID: rid});
-    }
-    */
 
     setUser = (u) => {
         let newUser = {

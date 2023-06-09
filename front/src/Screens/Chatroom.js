@@ -48,7 +48,6 @@ class Chatroom extends react.Component{
       }).then((res) => {
         res.json().then(data => {
           this.setState({ messages: data });
-          //this.setState({rooms:data, username: this.props.username}); 
         });
       }).catch((error) => {
         console.log("Error fetching messages:", error);
@@ -128,8 +127,6 @@ class Chatroom extends react.Component{
     }).then((res) => {
         res.json().then((data) => {
             if (data.status === 200) {
-                //alert("Account created");
-                //this.props.changeScreen("lobby");
             }
             else {
                 console.log("failed to send message to database")
@@ -147,7 +144,6 @@ class Chatroom extends react.Component{
           body: JSON.stringify({ "roomID": this.props.room._id, "roomName": this.props.room.name}),
       })
       .then((data) => {
-         //this.props.changeScreen("lobby");
          this.goBack();
       });
   };
@@ -161,8 +157,6 @@ class Chatroom extends react.Component{
     })
     .then((res) => {
         res.json().then(data => {
-            //this.setState({rooms:data, username: this.props.user.username, creator:this.props.room.creator});
-            //this.props.changeScreen("lobby"); 
             this.goBack();
         });
     });
@@ -178,7 +172,6 @@ class Chatroom extends react.Component{
         },
     }).then((res) => {
         res.json().then(data => {
-          console.log("data in goBack", data)
           this.props.setRooms(data);
           this.props.changeScreen("lobby");
         });
@@ -192,13 +185,11 @@ class Chatroom extends react.Component{
           <h2>Chatroom: {this.props.room.name}</h2>
           <h3>Invite friends with this code: {this.props.room.code}</h3>
           <div className="msg-container">
-            {/* Show chats */}
             {this.state.messages.map((message, index) => (
               <div key={index}>{message.sender ? message.sender : message.username}: {message.message}</div>
             ))}
           </div>
           <div className="chat-div">
-            {/* Show chat input box */}
             <input
               type="text"
               value={this.state.message}
