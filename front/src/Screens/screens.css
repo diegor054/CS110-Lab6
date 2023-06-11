@@ -29,6 +29,19 @@
     color: white; 
 }
 
+.msg-button:hover {
+    background-color: rgba(4, 116, 201, 0.5);
+    cursor: pointer;
+}
+
+.msg-button-active {
+    background-color: red;
+}
+
+.msg-button-active:hover {
+    background-color: maroon;
+    cursor: pointer;
+}
 
 .logout-button {
     display: flex; 
