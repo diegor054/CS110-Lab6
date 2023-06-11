@@ -14,22 +14,32 @@ class Chatroom extends react.Component{
     });
       this.state = {
         messages: [],
-        text: "",
         message: "",
         searchActive: false,
+        filteredMessages: [],
       };
       
       this.socket.on("chat message", (data) => {
         this.setState((prevState) => ({
           messages: [...prevState.messages, data],
         }));
+        if (this.state.searchActive) {
+          this.filterMessages();
+        }
         console.log("all messages in this room: ", this.state.messages)
       });
       
     }
 
     handleMessageChange = (event) => {
-      this.setState({ message: event.target.value });
+      const { searchActive } = this.state;
+      const message = event.target.value;
+    
+      this.setState({ message }, () => {
+        if (searchActive) {
+          this.filterMessages();
+        }
+      });
     };
   
     componentDidMount = (data) => {
@@ -185,18 +195,36 @@ class Chatroom extends react.Component{
     handleSearchToggle = () => {
       this.setState((prevState) => ({
         searchActive: !prevState.searchActive,
-      }));
+      }), () => {
+        if (this.state.searchActive) {
+          this.filterMessages();
+        }
+      });
+    };
+
+    filterMessages = () => {
+      const { messages, searchActive, message } = this.state;
+  
+      if (searchActive && message.trim() !== "") {
+        const filtered = messages.filter((msg) =>
+          msg.message.toLowerCase().includes(message.toLowerCase())
+        );
+        this.setState({ filteredMessages: filtered });
+      } else {
+        this.setState({ filteredMessages: messages });
+      }
     };
 
     render() { 
       const isCreator = (this.props.user.userID === this.props.room.creator);
       const searchButtonClass = this.state.searchActive ? "msg-button-active" : "msg-button";
+      const messages = this.state.searchActive ? this.state.filteredMessages : this.state.messages;
       return (
         <div >
           <h2>Chatroom: {this.props.room.name}</h2>
           <h3>Invite friends with this code: {this.props.room.code}</h3>
           <div className="msg-container">
-            {this.state.messages.map((message, index) => (
+            {messages.map((message, index) => (
               <div key={index}>
                 <div style={{border:"solid #e6ecf0"}}>
                   <div>
