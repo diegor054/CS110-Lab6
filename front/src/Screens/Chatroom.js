@@ -115,7 +115,7 @@ class Chatroom extends react.Component{
 
     handleSendMessage = () => {
       const data = {
-        user: this.props.user.userID,
+        sender: this.props.user.userID,
         room: this.props.room.name,
         message: this.state.message
       }
@@ -220,15 +220,15 @@ class Chatroom extends react.Component{
             {messages.map((message, index) => (
               <div key={index}>
                 <div style={{border:"solid #e6ecf0"}}>
-                  {message.sender ? 
-                  message.sender.name 
-                  : this.props.user.name}
+                  <div style={{display: "flex"}}>
+                  {message.sender.name}
+                  <span style={{fontWeight: "bold"}}> @{message.sender.username} </span>
+                  </div>
                   <br/>
                   {message.message}
                   
-                  <br/>
-                  </div>
-                {/*message.sender  === this.props.user.userName && <button className="edit-btn" > edit </button>*/} 
+                {message.sender.username  === this.props.user.userName && <button className="edit-btn" > edit </button>} 
+                </div>
               </div>
             ))}
           </div>

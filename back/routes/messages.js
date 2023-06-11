@@ -9,6 +9,7 @@ router.get('/:room', async (req, res) => {
     const room = req.params.room;
     try {
         const messages = await Messages.find({room});
+        console.log(messages, "getRoom messages")
         for (let m of messages) {
             const sender = await User.findById(m.sender)
             m.sender = sender;
@@ -24,10 +25,10 @@ router.get('/:room', async (req, res) => {
 });
 
 router.post('/',  async (req, res)=>{
-    const {user, room, message} = req.body;
+    const {sender, room, message} = req.body;
     //const sender = await User.findById(user);
     const newMessage = new Messages ({
-        sender: user,
+        sender: sender,
         room: room,
         message: message,
     })
