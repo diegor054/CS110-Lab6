@@ -41,7 +41,7 @@ class Lobby extends react.Component{
     routeToRoom(room) {
         this.props.changeScreen("chatroom");
         this.props.setRoom(room);
-        this.socket.emit("join", {"room":room.name, "username":this.props.user.username, "creator":room.creator});
+        this.socket.emit("join", {"room":room.name, "username":this.props.user.userName, "creator":room.creator});
         this.setState({room: room, username:this.state.username, screen: "chatroom", rooms: this.state.rooms});
     }
 
