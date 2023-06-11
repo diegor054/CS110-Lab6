@@ -28,7 +28,7 @@ router.post('/',  async (req, res)=>{
     const {sender, room, message} = req.body;
     //const sender = await User.findById(user);
     const newMessage = new Messages ({
-        sender: sender,
+        sender: sender.userID,
         room: room,
         message: message,
     })

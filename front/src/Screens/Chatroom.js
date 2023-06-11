@@ -125,7 +125,8 @@ class Chatroom extends react.Component{
         sender: {
           name: this.props.user.nameOfUser,
           username: this.props.user.userName,
-          pfp: this.props.user.pfp
+          pfp: this.props.user.pfp,
+          userID: this.props.user.userID,
         },
         room: this.props.room.name,
         message: this.state.message
