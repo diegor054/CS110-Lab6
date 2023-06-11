@@ -1,5 +1,6 @@
 import react from "react";
 import {io} from 'socket.io-client';
+import DefaultPfp from "./../default-pfp.jpg"
 import './screens.css'; 
 
 class Chatroom extends react.Component{
@@ -198,6 +199,14 @@ class Chatroom extends react.Component{
             {this.state.messages.map((message, index) => (
               <div key={index}>
                 <div style={{border:"solid #e6ecf0"}}>
+                  <div>
+                    {console.log(message.sender.name, "herettt")}
+                    {message.sender.pfp ?
+                    <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
+                     :
+                    <img src={message.sender.pfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
+                    } 
+                  </div>
                   <div style={{display: "flex"}}>
                   {message.sender.name}
                   <span style={{fontWeight: "bold"}}> @{message.sender.username} </span>
