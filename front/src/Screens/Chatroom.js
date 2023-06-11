@@ -15,6 +15,7 @@ class Chatroom extends react.Component{
         messages: [],
         text: "",
         message: "",
+        searchActive: false,
       };
       
       this.socket.on("chat message", (data) => {
@@ -178,8 +179,15 @@ class Chatroom extends react.Component{
     });
     }
 
+    handleSearchToggle = () => {
+      this.setState((prevState) => ({
+        searchActive: !prevState.searchActive,
+      }));
+    };
+
     render() { 
       const isCreator = (this.props.user.userID === this.props.room.creator);
+      const searchButtonClass = this.state.searchActive ? "msg-button-active" : "msg-button";
       return (
         <div >
           <h2>Chatroom: {this.props.room.name}</h2>
@@ -200,7 +208,9 @@ class Chatroom extends react.Component{
             />
             <button className="msg-button" onClick={this.handleSendMessage}>Send</button>
             <button className="msg-button" onClick={this.goBack}>Back To Lobby</button>
-            <button className="msg-button">Search</button>
+            <button className={searchButtonClass} onClick={this.handleSearchToggle}>
+              {this.state.searchActive ? "Search On" : "Search Off"}
+            </button>
             {isCreator ? (
               <button className="msg-button" onClick={this.handleDeleteRoom}>Delete Room</button>
             )
