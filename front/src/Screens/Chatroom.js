@@ -47,7 +47,7 @@ class Chatroom extends react.Component{
         },
       }).then((res) => {
         res.json().then(data => {
-          console.log(data)
+          //console.log(data)
           this.setState({ messages: data });
         });
       }).catch((error) => {
@@ -128,6 +128,7 @@ class Chatroom extends react.Component{
     }).then((res) => {
         res.json().then((data) => {
             if (data.status === 200) {
+            //hi
             }
             else {
                 console.log("failed to send message to database")
@@ -188,9 +189,16 @@ class Chatroom extends react.Component{
           <div className="msg-container">
             {this.state.messages.map((message, index) => (
               <div key={index}>
-                {/*message.sender.user ? message.sender : message.username}: {message.message*/}
-                {message.sender.username } ghi {message.message}
-                {/*message.sender === this.props.user.userName && <button className="edit-btn" > edit </button>*/} 
+                <div style={{border:"solid #e6ecf0"}}>
+                  {message.sender ? 
+                  message.sender.name 
+                  : this.props.user.name}
+                  <br/>
+                  {message.message}
+                  
+                  <br/>
+                  </div>
+                {/*message.sender  === this.props.user.userName && <button className="edit-btn" > edit </button>*/} 
               </div>
             ))}
           </div>

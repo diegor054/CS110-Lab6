@@ -15,6 +15,7 @@ router.get('/:room', async (req, res) => {
             //let user = await User.findById(userId);
             //let roomIndex = user.rooms.indexOf(roomID);
         }
+        console.log(messages, "meeeee")
         res.status(200).json(messages);
     } catch (error) {
         console.log(error);
@@ -24,11 +25,9 @@ router.get('/:room', async (req, res) => {
 
 router.post('/',  async (req, res)=>{
     const {user, room, message} = req.body;
-    const sender = await User.findById(user);
-    console.log("user", user)
-    console.log("sender", sender)
+    //const sender = await User.findById(user);
     const newMessage = new Messages ({
-        sender: sender,
+        sender: user,
         room: room,
         message: message,
     })
