@@ -65,3 +65,7 @@
 .msg-container {
     margin-bottom: 70px; 
 }
+
+.edit-btn {
+    float: right; 
+}
