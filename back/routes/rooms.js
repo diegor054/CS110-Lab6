@@ -1,12 +1,10 @@
 const express = require('express');
-const router = express.Router()
-// TODO: add rest of the necassary imports
+const router = express.Router();
 const mongoose = require('mongoose');
-const Room = require('../model/room');  // assuming you have a Room model
+const Room = require('../model/room');
 const User = require('../model/user');
 const messages = require('../model/messages');
 
-module.exports = router;
 
 //Get all the rooms
 router.get('/all', async (req, res) => {
