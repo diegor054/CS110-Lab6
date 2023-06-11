@@ -197,13 +197,14 @@ class Chatroom extends react.Component{
             />
             <button className="msg-button" onClick={this.handleSendMessage}>Send</button>
             <button className="msg-button" onClick={this.goBack}>Back To Lobby</button>
+            <button className="msg-button">Search</button>
             {isCreator ? (
               <button className="msg-button" onClick={this.handleDeleteRoom}>Delete Room</button>
             )
-          :
-          (
-            <button className="msg-button" onClick={this.handleLeaveRoom}>Forget Room</button>
-          )
+            :
+            (
+              <button className="msg-button" onClick={this.handleLeaveRoom}>Forget Room</button>
+            )
           }
           </div>
         </div>
