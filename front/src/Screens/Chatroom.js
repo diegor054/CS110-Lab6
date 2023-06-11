@@ -22,17 +22,23 @@ class Chatroom extends react.Component{
         this.setState((prevState) => ({
           messages: [...prevState.messages, data],
         }));
-        this.filterMessages();
+        if (this.state.searchActive) {
+          this.filterMessages();
+        }
         console.log("all messages in this room: ", this.state.messages)
       });
       
     }
 
     handleMessageChange = (event) => {
-      this.setState({ message: event.target.value });
-      if (this.state.searchActive) {
-        this.filterMessages();
-      }
+      const { searchActive } = this.state;
+      const message = event.target.value;
+    
+      this.setState({ message }, () => {
+        if (searchActive) {
+          this.filterMessages();
+        }
+      });
     };
   
     componentDidMount = (data) => {
