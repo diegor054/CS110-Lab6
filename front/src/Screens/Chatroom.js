@@ -47,6 +47,7 @@ class Chatroom extends react.Component{
         },
       }).then((res) => {
         res.json().then(data => {
+          console.log(data)
           this.setState({ messages: data });
         });
       }).catch((error) => {
@@ -109,7 +110,7 @@ class Chatroom extends react.Component{
 
     handleSendMessage = () => {
       const data = {
-        username: this.props.user.userName,
+        user: this.props.user.userID,
         room: this.props.room.name,
         message: this.state.message
       }
@@ -187,8 +188,9 @@ class Chatroom extends react.Component{
           <div className="msg-container">
             {this.state.messages.map((message, index) => (
               <div key={index}>
-                {message.sender ? message.sender : message.username}: {message.message}
-                {message.sender === this.props.user.userName && <button className="edit-btn" > edit </button>} 
+                {/*message.sender.user ? message.sender : message.username}: {message.message*/}
+                {message.sender.username } ghi {message.message}
+                {/*message.sender === this.props.user.userName && <button className="edit-btn" > edit </button>*/} 
               </div>
             ))}
           </div>

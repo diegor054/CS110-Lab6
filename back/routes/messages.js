@@ -1,5 +1,6 @@
 const express = require('express');
 const Messages = require('../model/messages');
+const User = require('../model/user');
 const router = express.Router()
 
 module.exports = router;
@@ -8,6 +9,12 @@ router.get('/:room', async (req, res) => {
     const room = req.params.room;
     try {
         const messages = await Messages.find({room});
+        for (let m of messages) {
+            const sender = await User.findById(m.sender)
+            m.sender = sender;
+            //let user = await User.findById(userId);
+            //let roomIndex = user.rooms.indexOf(roomID);
+        }
         res.status(200).json(messages);
     } catch (error) {
         console.log(error);
@@ -16,12 +23,16 @@ router.get('/:room', async (req, res) => {
 });
 
 router.post('/',  async (req, res)=>{
-    const {username, room, message} = req.body;
+    const {user, room, message} = req.body;
+    const sender = await User.findById(user);
+    console.log("user", user)
+    console.log("sender", sender)
     const newMessage = new Messages ({
-        sender: username,
+        sender: sender,
         room: room,
         message: message,
     })
+    console.log("trying to send new message", newMessage)
     try{
         const dataSaved = await newMessage.save();
         res.status(200).json({dataSaved, status: 200});
