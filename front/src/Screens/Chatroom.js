@@ -122,7 +122,11 @@ class Chatroom extends react.Component{
 
     handleSendMessage = () => {
       const data = {
-        sender: this.props.user.userID,
+        sender: {
+          name: this.props.user.userName,
+          username: this.props.user.userName,
+          pfp: this.props.user.pfp
+        },
         room: this.props.room.name,
         message: this.state.message
       }
