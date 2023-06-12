@@ -79,6 +79,7 @@ class ScreenHandler extends react.Component{
             nameOfUser: u.name,
             pfp: u.pfp
         }
+        console.log("in screen handler", newUser)
         this.setState({user: newUser})
     }
 

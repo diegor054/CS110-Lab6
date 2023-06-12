@@ -45,7 +45,7 @@ router.post('/login', async (req, res) => {
       };
     sgMail.send(msg);
     session.user = user;
-    console.log(user);
+    console.log(user, "in log in this is the user");
     res.status(200).json({ msg: "logged in", tokenRequired: true, user: user });
   }
 });
@@ -111,7 +111,7 @@ router.post('/verify', async (req, res) => {
     req.session.authenticated = true;
     req.session.userId = user._id;
     req.session.user = user;
-    res.json({ msg: "logged in", user: username, status: true});
+    res.json({ msg: "logged in", user: user, status: true});
   } else {
     return res.json({ msg: "Incorrect Token", status: false });
   }
