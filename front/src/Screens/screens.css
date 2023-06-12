@@ -75,12 +75,14 @@
     padding-top: 20px;
     padding-bottom: 20px; 
     padding-left: 20%;
-    padding-right: 20%; 
+    padding-right: 10%; 
     
 }
 
 .msg-container {
     margin-bottom: 150px; 
+    padding-left: 20%;
+    padding-right: 20%; 
 }
 
 .edit-btn {
@@ -92,7 +94,14 @@
 }
 
 .chat-box {
-    width: 70%; 
+    width: 80%; 
     height: 30px; 
 }
 
+
+@media screen and (max-width: 900px) {
+    .msg-container {
+        padding-left: 5%;
+        padding-right: 5%; 
+    }
+}
