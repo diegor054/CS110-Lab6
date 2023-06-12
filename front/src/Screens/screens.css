@@ -1,32 +1,32 @@
 .room-buttons {
     margin: 0px;
-    padding: 10px; 
+    padding: 10px;
     display: inline-flex;
-    flex-wrap: wrap; 
-    gap: 10px;  
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .user-form {
-    padding: 0px 20px 0px 20px; 
-    /* border: solid grey 1px;  */
+    padding: 0px 20px 0px 20px;
+    /* border: solid grey 1px; */
 }
 
 .user-submit {
-    padding: 10px; 
-    margin-top: 20px; 
-    background-color: rgb(4, 116, 201); 
-    border: none; 
-    border-radius: 5%; 
-    color: white; 
+    padding: 10px;
+    margin-top: 20px;
+    background-color: rgb(4, 116, 201);
+    border: none;
+    border-radius: 5%;
+    color: white;
 }
 
 .msg-button {
-    padding: 5px; 
-    margin: 2.5px; 
-    background-color: rgb(4, 116, 201); 
-    border: none; 
+    padding: 5px;
+    margin: 2.5px;
+    background-color: rgb(4, 116, 201);
+    border: none;
     border-radius: 5px;
-    color: white; 
+    color: white;
 }
 
 .msg-button:hover {
@@ -44,21 +44,22 @@
 }
 
 .logout-button {
-    display: flex; 
+    display: flex;
     justify-content: flex-end;
     margin: 15px;
-    
 }
 
 .room-name {
-    font-size: 20px;  /* Adjust as necessary */
+    font-size: 20px;
+    /* Adjust as necessary */
 }
 
 .room-code {
-    font-size: 12px;  /* Adjust as necessary */
+    font-size: 12px;
+    /* Adjust as necessary */
 }
 
-.room-button{
+.room-button {
     display: flex;
     /* flex-wrap: wrap;  */
     align-items: center;
@@ -67,31 +68,30 @@
 }
 
 .chat-div {
-    bottom: 0; 
-    position: fixed; 
-    background-color: rgb(62, 62, 106); 
-    width: 100%; 
+    bottom: 0;
+    position: fixed;
+    background-color: rgb(62, 62, 106);
+    width: 100%;
     left: 0px;
     padding-top: 20px;
-    padding-bottom: 20px; 
+    padding-bottom: 20px;
     padding-left: 50px;
     padding-right: 0px;
 }
 
 .msg-container {
-    margin-bottom: 150px; 
+    margin-bottom: 150px;
 }
 
 .edit-btn {
-    float: right; 
-    color: white; 
-    background: rgb(95, 95, 210); 
-    border: none; 
+    float: right;
+    color: white;
+    background: rgb(95, 95, 210);
+    border: none;
     border-radius: 0px 0px 5px 5px;
 }
 
 .chat-box {
-    width: 70%; 
-    height: 30px; 
+    width: 70%;
+    height: 30px;
 }
-

@@ -7,31 +7,31 @@
 // import Chat from './Chat.js';
 
 // class App extends react.Component {
-//   constructor(props){
-//     super(props);
-    
-//     this.socket = io('http://localhost:3000');
-//     this.state = {
-//       username: '',
-//       room: '',
-//       screen: "init",
+//     constructor(props) {
+//         super(props);
+
+//         this.socket = io('http://localhost:3000');
+//         this.state = {
+//             username: '',
+//             room: '',
+//             screen: "init",
+//         }
 //     }
-//   }
 
-//   click = (room, message) => {
-//     console.log(room);
-//     this.socket.emit('join', {room: room, username: message});
-//     this.setState({room: room, username: message, screen: "chat"});
-//   }
-  
+//     click = (room, message) => {
+//         console.log(room);
+//         this.socket.emit('join', { room: room, username: message });
+//         this.setState({ room: room, username: message, screen: "chat" });
+//     }
 
-//   render(){
-//   return (
-//     <div className="App">
-//       {this.state.screen === "init" ? <Init click={this.click}></Init> : <Chat socket={this.socket}></Chat>}
-//     </div>
-//   );
-//   }
+
+//     render() {
+//         return (
+//             <div className="App">
+//                 {this.state.screen === "init" ? <Init click={this.click}></Init> : <Chat socket={this.socket}></Chat>}
+//             </div>
+//         );
+//     }
 // }
 
 // export default App;
@@ -56,53 +56,53 @@ let reached = false;
 let adjusting = 0;
 
 function App() {
-  const [selectedScreen, setSelectedScreen] = React.useState(0);
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const [mode, setMode] = React.useState('light');
+    const [selectedScreen, setSelectedScreen] = React.useState(0);
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const [mode, setMode] = React.useState('light');
 
-  React.useEffect(() => {
-    if (localStorage.getItem('mode') !== null)
-      setMode(localStorage.getItem('mode'));
-    else
-      setMode(prefersDarkMode ? 'dark' : 'light');
-  }, [prefersDarkMode]);
+    React.useEffect(() => {
+        if (localStorage.getItem('mode') !== null)
+            setMode(localStorage.getItem('mode'));
+        else
+            setMode(prefersDarkMode ? 'dark' : 'light');
+    }, [prefersDarkMode]);
 
-  React.useEffect(() => {
-    localStorage.setItem('mode', mode)
-  }, [mode]);
+    React.useEffect(() => {
+        localStorage.setItem('mode', mode)
+    }, [mode]);
 
-  const colorMode = React.useMemo(
-    () => ({
-      // The dark mode switch would invoke this method
-      toggleColorMode: () => {
-        setMode((prevMode) =>
-          prevMode === 'light' ? 'dark' : 'light',
-        );
-        // localStorage.setItem('mode', mode)
-      },
-    }),
-    [],
-  );
+    const colorMode = React.useMemo(
+        () => ({
+            // The dark mode switch would invoke this method
+            toggleColorMode: () => {
+                setMode((prevMode) =>
+                    prevMode === 'light' ? 'dark' : 'light',
+                );
+                // localStorage.setItem('mode', mode)
+            },
+        }),
+        [],
+    );
 
-  // Update the theme only if the mode changes
-  const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-  const ColorModeContext = React.createContext({
-    toggleColorMode: () => {
-      // This is intentional
-    }
-  });
+    // Update the theme only if the mode changes
+    const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+    const ColorModeContext = React.createContext({
+        toggleColorMode: () => {
+            // This is intentional
+        }
+    });
 
-  return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <ScreenHandler />
-        <IconButton style={{ zIndex: 5, color: "black", position: "absolute", top: 10, right: 10 }} onClick={colorMode.toggleColorMode} aria-label="delete">
-          {mode === 'light' ? <BedtimeIcon /> : <LightModeIcon />}
-        </IconButton>
-      </ThemeProvider>
-    </ColorModeContext.Provider>
-  );
+    return (
+        <ColorModeContext.Provider value={colorMode}>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <ScreenHandler />
+                <IconButton style={{ zIndex: 5, color: "black", position: "absolute", top: 10, right: 10 }} onClick={colorMode.toggleColorMode} aria-label="delete">
+                    {mode === 'light' ? <BedtimeIcon /> : <LightModeIcon />}
+                </IconButton>
+            </ThemeProvider>
+        </ColorModeContext.Provider>
+    );
 }
 
 export default App;

@@ -1,9 +1,9 @@
 import react from "react";
 import { Button, TextField } from "@mui/material";
-import './../Screens/screens.css'; 
+import './../Screens/screens.css';
 
-class Form extends react.Component{
-    constructor(props){
+class Form extends react.Component {
+    constructor(props) {
         super(props);
         // for each item in props.fields, create an item in this.state.fields
         let fields = [];
@@ -18,7 +18,7 @@ class Form extends react.Component{
     handleChange = (event, index) => {
         let fields = this.state.fields;
         fields[index][0] = event.target.value;
-        this.setState({fields: fields});
+        this.setState({ fields: fields });
     }
 
     handleSubmit = (event) => {
@@ -31,22 +31,20 @@ class Form extends react.Component{
         this.props.submit(data);
     }
 
-    render(){
+    render() {
         return (
             <div>
-                
                 <Button onClick={this.props.close}> x </Button>
                 <div className="user-form">
                     <h3> {this.props.type} </h3>
-
                     <form onSubmit={this.handleSubmit}>
                         {this.state.fields.map((field, index) => {
-                            return(
+                            return (
                                 <div>
-                                    <TextField 
-                                        variant="standard" 
-                                        key={"auth"+field[1]} 
-                                        label={field[1]} 
+                                    <TextField
+                                        variant="standard"
+                                        key={"auth" + field[1]}
+                                        label={field[1]}
                                         onChange={(event) => this.handleChange(event, index)}
                                     />
                                 </div>
@@ -55,7 +53,6 @@ class Form extends react.Component{
                         <input className="user-submit" type="submit"></input>
                     </form>
                 </div>
-
             </div>
         );
     }
