@@ -8,6 +8,7 @@ class Auth extends react.Component{
         this.state = {
             showForm: false,
             selectedForm: undefined,
+            tokenRequired: true
         }
     }
 
@@ -35,11 +36,14 @@ class Auth extends react.Component{
         .then((data) => {
             console.log(data);
                if (data.msg === "logged in") {
-                    if (data.tokenRequired) {
+                    if (this.state.tokenRequired) {
+                        console.log(data.tokenRequired, "token in log in")
                         this.setState({ showForm: true, selectedForm: "code" });
                     } else {
-                    this.props.setUser(data.user)
-                    this.props.changeScreen("lobby");
+                    console.log(data.user, "in login")
+                    this.setState({ showForm: false});
+                    //this.props.setUser(data.user)
+                   // this.props.changeScreen("lobby");
 
                     }
                 }
@@ -96,10 +100,13 @@ class Auth extends react.Component{
         })
         .then((data) => {
             if (data.msg === "logged in") {
+                console.log(data.user, "in verify")
+                this.setState({tokenRequired:false})
+                //this.props.setUser(data.user)
+                //this.props.changeScreen("lobby");
                 this.props.setUser(data.user)
                 this.props.changeScreen("lobby");
-                
-            } else {
+            } else {  
                 alert(data.msg);
             }
         })
