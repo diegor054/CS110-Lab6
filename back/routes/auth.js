@@ -152,7 +152,6 @@ router.post('/login', async (req, res) => {
       req.user = user;
       const userRooms = await Room.find({users: user._id})
       user.rooms = userRooms;
-      console.log("user logged in: ", user)
       res.json({ msg: "logged in",user:user});
     }
 });
@@ -199,7 +198,6 @@ router.post('/editPFP', async (req, res) => {
 router.post('/editname', async (req, res) => {
   // TODO: write necassary codes to join a new room
   const { newName, username } = req.body;
-  console.log("My name change is:", newName)
   const user = await User.findOne({ username });
   user.name = newName;
   await user.save();
