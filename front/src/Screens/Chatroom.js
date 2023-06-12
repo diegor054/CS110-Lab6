@@ -231,23 +231,21 @@ class Chatroom extends react.Component{
           <div className="msg-container">
             {messages.map((message, index) => (
               <div key={index}>
-                <div style={{border:"solid #e6ecf0"}}>
-                  <div>
+                <div style={{border:"solid #e6ecf0", display: "flex"}}>
+                  <div >
                     {console.log(message.sender.pfp , "profile pic in chat")}
                     {!message.sender.pfp ?
-                    <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
+                    <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"50px", width:"50px", borderRadius: "50%"}} />
                      :
-                    <img src={message.sender.pfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
+                    <img src={message.sender.pfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"50px", width:"50px", borderRadius: "50%"}} />
                     } 
                   </div>
-                  <div style={{display: "flex"}}>
-                  {message.sender.name}
-                  <span style={{fontWeight: "bold"}}> @{message.sender.username} </span>
-                  </div>
-                  <br/>
-                  {message.message}
-                  
-                {message.sender.username  === this.props.user.userName && <button className="edit-btn" > edit </button>} 
+                        <div style={{color: "black", margin:"10px"}}>
+                        <span style={{fontWeight: "bold"}}> {message.sender.name}</span>
+                        <span style={{color: "gray", fontSize:"14px"}}> @{message.sender.username}</span>
+                        <div>{message.message}</div>
+                      </div>
+                {message.sender.username  === this.props.user.userName && <button className="edit-btn" style={{height: "20px", marginTop:"8%", marginLeft:"33%"}}> edit </button>} 
                 </div>
               </div>
             ))}
