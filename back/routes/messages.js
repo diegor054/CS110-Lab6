@@ -10,14 +10,12 @@ router.get('/:room', async (req, res) => {
     const room = req.params.room;
     try {
         const messages = await Messages.find({room});
-        console.log(messages, "getRoom messages")
         for (let m of messages) {
             const sender = await User.findById(m.sender)
             m.sender = sender;
             //let user = await User.findById(userId);
             //let roomIndex = user.rooms.indexOf(roomID);
         }
-        console.log(messages, "meeeee")
         res.status(200).json(messages);
     } catch (error) {
         console.log(error);
@@ -34,7 +32,6 @@ router.post('/',  async (req, res)=>{
         room: room,
         message: message,
     })
-    console.log("trying to send new message", newMessage)
     try{
         const dataSaved = await newMessage.save();
         res.status(200).json({dataSaved, status: 200});
@@ -48,7 +45,6 @@ router.post('/',  async (req, res)=>{
 // edit message 
 router.post('/edit', async (req, res) => {
     const { newMsg, msgID} = req.body;
-    console.log("pizza pizza"); 
     try {
         console.log("post request!"); 
         const Msg = await Messages.findById(msgID);
