@@ -246,13 +246,23 @@ class Chatroom extends react.Component{
                   <span style={{fontWeight: "bold"}}> @{message.sender.username} </span>
                   </div>
                   <br/>
+
+                  {(this.state.editMsgBox === message._id) ? 
+                  <div>
+                  <textarea rows="2" cols="50" defaultValue={message.message}></textarea> 
+                  <button className="edit-btn">submit</button>
+                  </div>: 
+                  <div>
                   {message.message}
-                  
                   {message.sender.username  === this.props.user.userName && 
                   <button className="edit-btn" onClick= {() => { this.setState({editMsgBox: message._id}) }}
                   > edit </button>} 
+                  
+                  </div>
+                  } 
                   <div>
-                  {(this.state.editMsgBox === message._id) && <textarea>{message.message}</textarea>}
+
+                  
                   </div> 
                   
                 </div>
