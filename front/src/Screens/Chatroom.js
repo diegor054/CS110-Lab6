@@ -16,6 +16,7 @@ class Chatroom extends react.Component{
         messages: [],
         message: "",
         searchActive: false,
+        editMsgBox: false, 
         filteredMessages: [],
       };
       
@@ -233,7 +234,7 @@ class Chatroom extends react.Component{
               <div key={index}>
                 <div style={{border:"solid #e6ecf0"}}>
                   <div>
-                    {console.log(message.sender.name, "herettt")}
+                    {/* {console.log(message.sender.name, "herettt")} */}
                     {message.sender.pfp ?
                     <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
                      :
@@ -247,7 +248,13 @@ class Chatroom extends react.Component{
                   <br/>
                   {message.message}
                   
-                {message.sender.username  === this.props.user.userName && <button className="edit-btn" > edit </button>} 
+                  {message.sender.username  === this.props.user.userName && 
+                  <button className="edit-btn" onClick= {() => { this.setState({editMsgBox: message._id}) }}
+                  > edit </button>} 
+                  <div>
+                  {(this.state.editMsgBox === message._id) && <textarea>{message.message}</textarea>}
+                  </div> 
+                  
                 </div>
               </div>
             ))}
