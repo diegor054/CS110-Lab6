@@ -285,7 +285,7 @@ render() {
 
               </div>: 
 
-              <div>
+              <div style={{ marginLeft: "auto" }}>
   
               {message.sender.username  === this.props.user.userName && 
               <button className="edit-btn" onClick= {() => 
