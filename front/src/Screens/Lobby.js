@@ -96,8 +96,10 @@ class Lobby extends react.Component{
     };
 
     handleNameSubmit = (event) => {
-        console.log(this.state.nameChange, "value of name change")
-        this.props.setName(this.state.nameChange);
+        console.log(this.state.nameChange, "value of name change");
+        const newName = this.state.nameChange;
+        this.setState({ nameOfUser: newName });
+        this.props.setName(newName); 
     }; 
 
     handleNameChange = (event) => {
@@ -144,7 +146,7 @@ class Lobby extends react.Component{
                         </div>
                         <div style={{paddingLeft:"5px"}}><h4>Name: {this.props.user.nameOfUser}</h4></div>
                         <div style={{paddingLeft: "5px"}} >
-                        <input type="text" placeholder="Change Name" value={this.nameChange} onChange={this.handleNameChange} />
+                        <input type="text" placeholder="Change Name" value={this.state.nameChange} onChange={this.handleNameChange} />
                         <button onClick={this.handleNameSubmit} >Submit</button>
                         </div>
                         <div style={{paddingLeft:"5px"}}><h4>Username: {this.props.user.userName}</h4></div>
