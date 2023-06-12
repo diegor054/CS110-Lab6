@@ -100,6 +100,7 @@ class Lobby extends react.Component{
         const newName = this.state.nameChange;
         this.setState({ nameOfUser: newName });
         this.props.setName(newName); 
+        this.setState({nameChange : ''})
     }; 
 
     handleNameChange = (event) => {
