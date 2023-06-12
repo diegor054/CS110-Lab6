@@ -45,7 +45,8 @@ router.post('/login', async (req, res) => {
       };
     sgMail.send(msg);
     session.user = user;
-    res.status(200).json({ msg: "logged in", tokenRequired: true });
+    console.log(user);
+    res.status(200).json({ msg: "logged in", tokenRequired: true, user: user });
   }
 });
 
@@ -105,12 +106,12 @@ router.post('/verify', async (req, res) => {
     token: token,
     window:2
   });
-  console.log("Token validation result:", tokenIsValid); // Add this line
+  console.log("Token validation result:", tokenIsValid); 
   if (tokenIsValid) {
     req.session.authenticated = true;
     req.session.userId = user._id;
     req.session.user = user;
-    res.json({ msg: "logged in", user: username, status: true, creator: session.userId });
+    res.json({ msg: "logged in", user: username, status: true});
   } else {
     return res.json({ msg: "Incorrect Token", status: false });
   }
