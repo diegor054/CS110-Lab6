@@ -50,41 +50,41 @@ router.post('/join', async (req, res) => {
     res.json({room:roomToJoin});
 });
     
-    router.post('/delete', async (req, res) => {
-        const {roomID, roomName} = req.body;
-        const roomToLeave = await Room.findById(roomID);
-        
-        for (let userId of roomToLeave.users) {
-            let user = await User.findById(userId);
-            let roomIndex = user.rooms.indexOf(roomID);
-            if (roomIndex > -1) {
-                user.rooms.splice(roomIndex, 1);
-                await user.save();
-            }
+router.post('/delete', async (req, res) => {
+    const {roomID, roomName} = req.body;
+    const roomToLeave = await Room.findById(roomID);
+    
+    for (let userId of roomToLeave.users) {
+        let user = await User.findById(userId);
+        let roomIndex = user.rooms.indexOf(roomID);
+        if (roomIndex > -1) {
+            user.rooms.splice(roomIndex, 1);
+            await user.save();
         }
-        await messages.deleteMany({room: roomName});
-        
-        await Room.deleteOne({_id: roomID});
-        res.send({message: 'Room deleted successfully.'});
-    });
+    }
+    await messages.deleteMany({room: roomName});
+    
+    await Room.deleteOne({_id: roomID});
+    res.send({message: 'Room deleted successfully.'});
+});
 
-    router.post('/leave', async (req, res) => {
-        const {roomID, userID} = req.body;
-            let user = await User.findById(userID);
-            let roomIndex = user.rooms.indexOf(roomID);
-            if (roomIndex > -1) {
-                user.rooms.splice(roomIndex, 1);
-                await user.save();
-            }
-            //await user.save();
-            let room = await Room.findById(roomID);
-            let userIndex = room.users.indexOf(userID);
-            room.users.splice(userIndex, 1);
-            await room.save();
-   
-            const userRooms = await Room.find({users: req.session.userId});
-        res.send({message: 'Room left successfully.', rooms:user.rooms});
-    });
+router.post('/leave', async (req, res) => {
+    const {roomID, userID} = req.body;
+        let user = await User.findById(userID);
+        let roomIndex = user.rooms.indexOf(roomID);
+        if (roomIndex > -1) {
+            user.rooms.splice(roomIndex, 1);
+            await user.save();
+        }
+        //await user.save();
+        let room = await Room.findById(roomID);
+        let userIndex = room.users.indexOf(userID);
+        room.users.splice(userIndex, 1);
+        await room.save();
+
+        const userRooms = await Room.find({users: req.session.userId});
+    res.send({message: 'Room left successfully.', rooms:user.rooms});
+});
 
 
 module.exports = router;

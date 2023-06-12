@@ -78,7 +78,6 @@ class Lobby extends react.Component{
         const b64 = await this.convertToBase64(f);
         this.props.setPFP(b64);
         this.setState({profilePic:b64})
-        
     };
  
     convertToBase64 = (file) => { //used to convert to readable format w
@@ -91,7 +90,7 @@ class Lobby extends react.Component{
             reader.onerror = (error) => {
                 rej(error);
             }; 
-            });
+        });
     };
 
     
