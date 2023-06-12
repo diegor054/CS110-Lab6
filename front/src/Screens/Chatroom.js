@@ -268,21 +268,21 @@ render() {
       <div className="msg-container">
         {messages.map((message, index) => (
           <div key={index}>
-            <div style={{border:"solid #e6ecf0"}}>
-              <div>
+            <div style={{border:"solid #e6ecf0", display: "flex"}}>
+                <div >
                 {/* {console.log(message.sender.name, "herettt")} */}
                 {message.sender.pfp ?
-                <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
+                <img src={message.sender.pfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"50px", width:"50px", borderRadius: "50%"}} />
                   :
-                <img src={message.sender.pfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
+                <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"50px", width:"50px", borderRadius: "50%"}} />
                 } 
               </div>
-              <div style={{display: "flex"}}>
-              {message.sender.name}
-              <span style={{fontWeight: "bold"}}> @{message.sender.username} </span>
+              <div style={{color: "black", margin:"10px",maxWidth:"1500px"}}>
+                        <span style={{fontWeight: "bold"}}> {message.sender.name}</span>
+                        <span style={{color: "gray", fontSize:"14px"}}> @{message.sender.username}</span>
+                        <div style={{overflowWrap: "break-word", width:"1500px"}}>{message.message}</div>
               </div>
-              <br/>
-
+              
               {(this.state.editMsgBox === message._id) ? 
               <div>
               <textarea rows="2" cols="50" 
@@ -299,7 +299,7 @@ render() {
               </div>: 
 
               <div>
-              {message.message}
+  
               {message.sender.username  === this.props.user.userName && 
               <button className="edit-btn" onClick= {() => 
                 { this.setState({editMsgBox: message._id})}}
@@ -307,11 +307,7 @@ render() {
               
               </div>
               } 
-              <div>
-
-              
-              </div> 
-              
+           
             </div>
           </div>
         ))}
