@@ -110,11 +110,13 @@ class ScreenHandler extends react.Component{
             display = <Auth server_url = {server_url} changeScreen={this.changeScreen} setUser={this.setUser}/>;
         }
         else if (this.state.screen === "lobby"){
-            if (this.state.username === "") {
+            if (this.state.user.nameOfUser === "") {
                 this.changeScreen("auth"); 
                 display = <Auth server_url = {server_url} changeScreen={this.changeScreen} setUser={this.setUser}/>;
             }
-            display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} user={this.state.user} setPFP={this.setPFP}/>;
+            else {
+                display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} user={this.state.user} setPFP={this.setPFP}/>;
+            }
         }
         else if (this.state.screen === "chatroom"){
             display = <Chatroom server_url = {server_url} changeScreen={this.changeScreen} room={this.state.room} user={this.state.user} setRooms={this.setRooms} pfp={this.state.user.pfp}/>;
