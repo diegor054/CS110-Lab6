@@ -268,7 +268,7 @@ render() {
       <div className="msg-container">
         {messages.map((message, index) => (
           <div key={index}>
-            <div style={{border:"solid #e6ecf0", display: "flex", maxWidth:"1000px"}}>
+            <div style={{border:"solid #e6ecf0", display: "flex"}}>
                 <div >
                 {/* {console.log(message.sender.name, "herettt")} */}
                 {message.sender.pfp ?
@@ -325,8 +325,6 @@ render() {
               onChange={this.handleMessageChange}
             />
             <button className="msg-button" onClick={this.handleSendMessage}>Send</button>
-        </div>
-        <div>
             <button className="msg-button" onClick={this.goBack}>Back To Lobby</button>
             <button className={searchButtonClass} onClick={this.handleSearchToggle}>
               {this.state.searchActive ? "Search On" : "Search Off"}
