@@ -1,4 +1,4 @@
-/*const express = require('express');
+const express = require('express');
 const User = require('../model/user');
 const Room = require('../model/room');  // assuming you have a Room model
 const router = express.Router()
@@ -45,6 +45,8 @@ router.post('/login', async (req, res) => {
       };
     sgMail.send(msg);
     session.user = user;
+    const userRooms = await Room.find({users: user._id})
+    user.rooms = userRooms;
     console.log(user, "in log in this is the user");
     res.status(200).json({ msg: "logged in", tokenRequired: true, user: user });
   }
@@ -111,6 +113,8 @@ router.post('/verify', async (req, res) => {
     req.session.authenticated = true;
     req.session.userId = user._id;
     req.session.user = user;
+    const userRooms = await Room.find({users: user._id});
+    user.rooms = userRooms;
     res.json({ msg: "logged in", user: user, status: true});
   } else {
     return res.json({ msg: "Incorrect Token", status: false });
@@ -124,10 +128,20 @@ router.post('/editPFP', async (req, res) => {
   await user.save();
 });
 
+router.post('/editname', async (req, res) => {
+  // TODO: write necassary codes to join a new room
+  const { newName, username } = req.body;
+  const user = await User.findOne({ username });
+  user.name = newName;
+  await user.save();
+});
+
 // write the edit webpage function here (change profile?)
 
 module.exports = router;
-*/
+
+
+/*
 const express = require('express');
 const User = require('../model/user');
 const Room = require('../model/room');  // assuming you have a Room model
@@ -203,4 +217,6 @@ router.post('/editname', async (req, res) => {
   await user.save();
 });
 
+
 // write the edit webpage function here (change profile?)
+*/

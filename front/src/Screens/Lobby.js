@@ -97,7 +97,6 @@ class Lobby extends react.Component{
     };
 
     handleNameSubmit = (event) => {
-        console.log(this.state.nameChange, "value of name change");
         const newName = this.state.nameChange;
         this.setState({ nameOfUser: newName });
         this.props.setName(newName); 
@@ -106,7 +105,6 @@ class Lobby extends react.Component{
 
     handleNameChange = (event) => {
         this.setState({nameChange:event.target.value}); 
-        console.log(this.state.nameChange)
     };
 
     
@@ -145,7 +143,10 @@ class Lobby extends react.Component{
                         </div>
                         <div style={{paddingLeft: "5px"}} >
                         <input type="file"  onChange={this.handleImageChange} />
+                        <br/>
+                        small images allowed only, 25KB max
                         </div>
+                        
                         <div style={{paddingLeft:"5px"}}><h4>Name: {this.props.user.nameOfUser}</h4></div>
                         <div style={{paddingLeft: "5px"}} >
                         <input type="text" placeholder="Change Name" value={this.state.nameChange} onChange={this.handleNameChange} />

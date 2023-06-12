@@ -59,7 +59,6 @@ class ScreenHandler extends react.Component{
 
     setName = (n) => {
         this.state.user.nameOfUser = n;
-        console.log("in sh setName", n)
         fetch(server_url + '/api/auth/editname', {
             method: "POST",
             mode: "cors",

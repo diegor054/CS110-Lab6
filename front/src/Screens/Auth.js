@@ -1,4 +1,4 @@
-/*import react from "react";
+import react from "react";
 import Form from "../Components/form.js";
 import { Button } from "@mui/material";
 
@@ -170,9 +170,9 @@ class Auth extends react.Component{
 }
 
 export default Auth;
-*/
 
 
+/*
 import react from "react";
 import Form from "../Components/form.js";
 import { Button } from "@mui/material";
@@ -271,3 +271,4 @@ class Auth extends react.Component{
 }
 
 export default Auth;
+*/
