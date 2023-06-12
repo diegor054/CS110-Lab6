@@ -222,15 +222,25 @@ filterMessages = () => {
   }
 };
 
-handleEditMsg = () => {
+handleEditMsg = (index) => {
   console.log("post request for message", this.state.editMsgBox); 
-  fetch(this.props.server_url + '/api/messages/editMsg', {
+  let data = { "newMsg": this.state.editMsg, "msgID": this.state.editMsgBox}; 
+  fetch(this.props.server_url + '/api/messages/edit', {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ "newMsg": this.state.editMsg, "msgID": this.state.editMsgBox}),
+    body: JSON.stringify(data),
   }).then((res) => {
-    console.log("finished?");
+    res.json().then(data => {
+      let newMessages = [...this.state.messages];  
+      newMessages[index].message = data.Msg.message;               
+      this.setState({ messages: newMessages }, () => {
+        console.log("finished editing");
+        this.setState({editMsgBox: "none"}); 
+      }); 
+    }).catch((error) => {
+      console.log("Error editing message:", error); 
+    })
   });
 }
 
@@ -268,11 +278,10 @@ render() {
                 // value={this.state.message}
                 onChange={ (e) => { 
                   this.setState({ editMsg: e.target.value});
-                  console.log("editMsg value: ", this.state.editMsg); 
+                  // console.log("editMsg value: ", this.state.editMsg); 
                 }}>
               </textarea> 
-              <button className="edit-btn" onClick={this.handleEditMsg
-              }>submit</button>
+              <button className="edit-btn" onClick={() => this.handleEditMsg(index)}>submit</button>
 
               </div>: 
 
