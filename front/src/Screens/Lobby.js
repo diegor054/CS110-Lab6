@@ -80,19 +80,8 @@ class Lobby extends react.Component{
         const b64 = await this.convertToBase64(f);
         this.props.setPFP(b64);
         this.setState({profilePic:b64})
-
-    }
-
-    handleNameSubmit = (event) => {
-        console.log(this.state.nameChange, "value of name change")
-        this.props.setName(this.state.nameChange);
-        event.target.field.value = "";
+        
     };
-
-    handleNameChange = (event) => {
-        this.setState({nameChange:event.target.value}); 
-        console.log(this.state.nameChange)
-    }; 
  
     convertToBase64 = (file) => { //used to convert to readable format w
         return new Promise((res, rej) => {
@@ -104,7 +93,7 @@ class Lobby extends react.Component{
             reader.onerror = (error) => {
                 rej(error);
             }; 
-            });
+        });
     };
 
     

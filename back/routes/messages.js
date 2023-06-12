@@ -5,6 +5,7 @@ const router = express.Router()
 
 module.exports = router;
 
+// get message history when first entering room 
 router.get('/:room', async (req, res) => {
     const room = req.params.room;
     try {
@@ -24,6 +25,7 @@ router.get('/:room', async (req, res) => {
     }
 });
 
+// send new message 
 router.post('/',  async (req, res)=>{
     const {sender, room, message} = req.body;
     //const sender = await User.findById(user);
@@ -43,6 +45,23 @@ router.post('/',  async (req, res)=>{
     }
 })
 
+// edit message 
+router.post('/editMsg', async (req, res) => {
+    console.log("in router!"); 
+    const { newMsg, msgID} = req.body;
+    try {
+        const Msg = await Messages.findOne({ msgID });
+        Msg.message = newMsg;
+        await Msg.save();
+        console.log("saved message!"); 
+        res.status(200).json({Msg});
+    } catch(error) {
+        console.log(error); 
+        res.status(500).json("Error editing message");
+    }
+});
+
+// check room for new messages 
 router.get('/check/:room', async (req, res) => {
     const room = req.params.room;
     try {
@@ -58,4 +77,4 @@ router.get('/check/:room', async (req, res) => {
       console.log(error);
       res.status(500).send("Error checking for new messages");
     }
-  });
+});

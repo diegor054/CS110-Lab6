@@ -15,7 +15,9 @@ class Chatroom extends react.Component{
       this.state = {
         messages: [],
         message: "",
+        editMsg: "", 
         searchActive: false,
+        editMsgBox: false, 
         filteredMessages: [],
       };
       
@@ -120,7 +122,7 @@ class Chatroom extends react.Component{
       clearTimeout(this.pollingTimeout);
     }
 
-    handleSendMessage = () => {
+  handleSendMessage = () => {
       const data = {
         sender: {
           name: this.props.user.nameOfUser,
@@ -153,18 +155,18 @@ class Chatroom extends react.Component{
             }
         });
     });
-    };    
+  };    
 
-    handleDeleteRoom = () => {
-      fetch(this.props.server_url + '/api/rooms/delete', {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ "roomID": this.props.room._id, "roomName": this.props.room.name}),
-      })
-      .then((data) => {
-         this.goBack();
-      });
+  handleDeleteRoom = () => {
+    fetch(this.props.server_url + '/api/rooms/delete', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ "roomID": this.props.room._id, "roomName": this.props.room.name}),
+    })
+    .then((data) => {
+        this.goBack();
+    });
   };
 
   handleLeaveRoom = () => {
@@ -182,97 +184,139 @@ class Chatroom extends react.Component{
 
 };
 
-    goBack = () => {
-      fetch(this.props.server_url + '/api/rooms/all', {
-        method: "GET",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    }).then((res) => {
-        res.json().then(data => {
-          this.props.setRooms(data);
-          this.props.changeScreen("lobby");
-        });
+goBack = () => {
+  fetch(this.props.server_url + '/api/rooms/all', {
+    method: "GET",
+    credentials: "include",
+    headers: {
+        "Content-Type": "application/json",
+    },
+}).then((res) => {
+    res.json().then(data => {
+      this.props.setRooms(data);
+      this.props.changeScreen("lobby");
     });
+});
+}
+
+handleSearchToggle = () => {
+  this.setState((prevState) => ({
+    searchActive: !prevState.searchActive,
+  }), () => {
+    if (this.state.searchActive) {
+      this.filterMessages();
     }
+  });
+};
 
-    handleSearchToggle = () => {
-      this.setState((prevState) => ({
-        searchActive: !prevState.searchActive,
-      }), () => {
-        if (this.state.searchActive) {
-          this.filterMessages();
-        }
-      });
-    };
+filterMessages = () => {
+  const { messages, searchActive, message } = this.state;
 
-    filterMessages = () => {
-      const { messages, searchActive, message } = this.state;
-  
-      if (searchActive && message.trim() !== "") {
-        const filtered = messages.filter((msg) =>
-          msg.message.toLowerCase().includes(message.toLowerCase())
-        );
-        this.setState({ filteredMessages: filtered });
-      } else {
-        this.setState({ filteredMessages: messages });
-      }
-    };
+  if (searchActive && message.trim() !== "") {
+    const filtered = messages.filter((msg) =>
+      msg.message.toLowerCase().includes(message.toLowerCase())
+    );
+    this.setState({ filteredMessages: filtered });
+  } else {
+    this.setState({ filteredMessages: messages });
+  }
+};
 
-    render() { 
-      const isCreator = (this.props.user.userID === this.props.room.creator);
-      const searchButtonClass = this.state.searchActive ? "msg-button-active" : "msg-button";
-      const messages = this.state.searchActive ? this.state.filteredMessages : this.state.messages;
-      return (
-        <div >
-          <h2>Chatroom: {this.props.room.name}</h2>
-          <h3>Invite friends with this code: {this.props.room.code}</h3>
-          <div className="msg-container">
-            {messages.map((message, index) => (
-              <div key={index}>
-                <div style={{border:"solid #e6ecf0", display: "flex"}}>
-                  <div >
-                    {console.log(message.sender.pfp , "profile pic in chat")}
-                    {!message.sender.pfp ?
-                    <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"50px", width:"50px", borderRadius: "50%"}} />
-                     :
-                    <img src={message.sender.pfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"50px", width:"50px", borderRadius: "50%"}} />
-                    } 
-                  </div>
-                        <div style={{color: "black", margin:"10px"}}>
-                        <span style={{fontWeight: "bold"}}> {message.sender.name}</span>
-                        <span style={{color: "gray", fontSize:"14px"}}> @{message.sender.username}</span>
-                        <div>{message.message}</div>
-                      </div>
-                {message.sender.username  === this.props.user.userName && <button className="edit-btn" style={{height: "20px", marginTop:"8%", marginLeft:"33%"}}> edit </button>} 
-                </div>
+handleEditMsg = () => {
+  console.log("post request for message", this.state.editMsgBox); 
+  fetch(this.props.server_url + '/api/messages/editMsg', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ "newMsg": this.state.editMsg, "msgID": this.state.editMsgBox}),
+  }).then((res) => {
+    console.log("finished?");
+  });
+}
+
+render() { 
+  const isCreator = (this.props.user.userID === this.props.room.creator);
+  const searchButtonClass = this.state.searchActive ? "msg-button-active" : "msg-button";
+  const messages = this.state.searchActive ? this.state.filteredMessages : this.state.messages;
+  return (
+    <div >
+      <h2>Chatroom: {this.props.room.name}</h2>
+      <h3>Invite friends with this code: {this.props.room.code}</h3>
+      <div className="msg-container">
+        {messages.map((message, index) => (
+          <div key={index}>
+            <div style={{border:"solid #e6ecf0"}}>
+              <div>
+                {/* {console.log(message.sender.name, "herettt")} */}
+                {message.sender.pfp ?
+                <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
+                  :
+                <img src={message.sender.pfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
+                } 
               </div>
-            ))}
-          </div>
-          <div className="chat-div">
-            <input
+              <div style={{display: "flex"}}>
+              {message.sender.name}
+              <span style={{fontWeight: "bold"}}> @{message.sender.username} </span>
+              </div>
+              <br/>
+
+              {(this.state.editMsgBox === message._id) ? 
+              <div>
+              <textarea rows="2" cols="50" 
+              defaultValue={message.message} 
               type="text"
-              value={this.state.message}
-              onChange={this.handleMessageChange}
-            />
-            <button className="msg-button" onClick={this.handleSendMessage}>Send</button>
-            <button className="msg-button" onClick={this.goBack}>Back To Lobby</button>
-            <button className={searchButtonClass} onClick={this.handleSearchToggle}>
-              {this.state.searchActive ? "Search On" : "Search Off"}
-            </button>
-            {isCreator ? (
-              <button className="msg-button" onClick={this.handleDeleteRoom}>Delete Room</button>
-            )
-            :
-            (
-              <button className="msg-button" onClick={this.handleLeaveRoom}>Forget Room</button>
-            )
-          }
+                // value={this.state.message}
+                onChange={ (e) => { 
+                  this.setState({ editMsg: e.target.value});
+                  console.log("editMsg value: ", this.state.editMsg); 
+                }}>
+              </textarea> 
+              <button className="edit-btn" onClick={this.handleEditMsg
+              }>submit</button>
+
+              </div>: 
+
+              <div>
+              {message.message}
+              {message.sender.username  === this.props.user.userName && 
+              <button className="edit-btn" onClick= {() => 
+                { this.setState({editMsgBox: message._id})}}
+              > edit </button>} 
+              
+              </div>
+              } 
+              <div>
+
+              
+              </div> 
+              
+            </div>
           </div>
-        </div>
-      );
-    }
+        ))}
+      </div>
+      <div className="chat-div">
+        <input
+          type="text"
+          value={this.state.message}
+          onChange={this.handleMessageChange}
+        />
+        <button className="msg-button" onClick={this.handleSendMessage}>Send</button>
+        <button className="msg-button" onClick={this.goBack}>Back To Lobby</button>
+        <button className={searchButtonClass} onClick={this.handleSearchToggle}>
+          {this.state.searchActive ? "Search On" : "Search Off"}
+        </button>
+        {isCreator ? (
+          <button className="msg-button" onClick={this.handleDeleteRoom}>Delete Room</button>
+        )
+        :
+        (
+          <button className="msg-button" onClick={this.handleLeaveRoom}>Forget Room</button>
+        )
+      }
+      </div>
+    </div>
+    );
+  }
 }
 
 export default Chatroom;
