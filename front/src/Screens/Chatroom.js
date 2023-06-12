@@ -284,7 +284,7 @@ render() {
               </div>
               
               {(this.state.editMsgBox === message._id) ? 
-              <div>
+              <div style={{ marginLeft: "auto" }}>
               <textarea rows="2" cols="50" 
               defaultValue={message.message} 
               type="text"
