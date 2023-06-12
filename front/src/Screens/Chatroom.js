@@ -255,7 +255,7 @@ render() {
       <div className="msg-container">
         {messages.map((message, index) => (
           <div key={index}>
-            <div style={{border:"solid #e6ecf0", display: "flex"}}>
+            <div style={{border:"solid #e6ecf0", display: "flex", maxWidth:"1000px"}}>
                 <div >
                 {/* {console.log(message.sender.name, "herettt")} */}
                 {message.sender.pfp ?
@@ -264,10 +264,10 @@ render() {
                 <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"50px", width:"50px", borderRadius: "50%"}} />
                 } 
               </div>
-              <div style={{color: "black", margin:"10px",maxWidth:"1500px"}}>
+              <div style={{color: "black", margin:"10px"}}>
                         <span style={{fontWeight: "bold"}}> {message.sender.name}</span>
                         <span style={{color: "gray", fontSize:"14px"}}> @{message.sender.username}</span>
-                        <div style={{overflowWrap: "break-word", width:"1500px"}}>{message.message}</div>
+                        <div style={{ overflowWrap: "break-word", wordBreak: "break-all" }}>{message.message}</div>
               </div>
               
               {(this.state.editMsgBox === message._id) ? 
