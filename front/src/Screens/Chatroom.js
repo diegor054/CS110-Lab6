@@ -249,9 +249,9 @@ render() {
               <div>
                 {/* {console.log(message.sender.name, "herettt")} */}
                 {message.sender.pfp ?
-                <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
-                  :
                 <img src={message.sender.pfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
+                  :
+                <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
                 } 
               </div>
               <div style={{display: "flex"}}>
