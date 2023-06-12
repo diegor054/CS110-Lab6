@@ -233,8 +233,8 @@ class Chatroom extends react.Component{
               <div key={index}>
                 <div style={{border:"solid #e6ecf0"}}>
                   <div>
-                    {console.log(message.sender.name, "herettt")}
-                    {message.sender.pfp ?
+                    {console.log(message.sender.pfp , "profile pic in chat")}
+                    {!message.sender.pfp ?
                     <img src={DefaultPfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
                      :
                     <img src={message.sender.pfp} alt="ProfilePic." style={{margin:"20px", objectFit: "contain", height:"100px", width:"100px"}} />
