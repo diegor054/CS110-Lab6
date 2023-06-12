@@ -70,19 +70,19 @@ router.post('/delete', async (req, res) => {
 
 router.post('/leave', async (req, res) => {
     const {roomID, userID} = req.body;
-        let user = await User.findById(userID);
-        let roomIndex = user.rooms.indexOf(roomID);
-        if (roomIndex > -1) {
-            user.rooms.splice(roomIndex, 1);
-            await user.save();
-        }
-        //await user.save();
-        let room = await Room.findById(roomID);
-        let userIndex = room.users.indexOf(userID);
-        room.users.splice(userIndex, 1);
-        await room.save();
+    let user = await User.findById(userID);
+    let roomIndex = user.rooms.indexOf(roomID);
+    if (roomIndex > -1) {
+        user.rooms.splice(roomIndex, 1);
+        await user.save();
+    }
+    //await user.save();
+    let room = await Room.findById(roomID);
+    let userIndex = room.users.indexOf(userID);
+    room.users.splice(userIndex, 1);
+    await room.save();
 
-        const userRooms = await Room.find({users: req.session.userId});
+    const userRooms = await Room.find({users: req.session.userId});
     res.send({message: 'Room left successfully.', rooms:user.rooms});
 });
 

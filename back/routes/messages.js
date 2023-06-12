@@ -46,11 +46,12 @@ router.post('/',  async (req, res)=>{
 })
 
 // edit message 
-router.post('/editMsg', async (req, res) => {
-    console.log("in router!"); 
+router.post('/edit', async (req, res) => {
     const { newMsg, msgID} = req.body;
+    console.log("pizza pizza"); 
     try {
-        const Msg = await Messages.findOne({ msgID });
+        console.log("post request!"); 
+        const Msg = await Messages.findById(msgID);
         Msg.message = newMsg;
         await Msg.save();
         console.log("saved message!"); 
