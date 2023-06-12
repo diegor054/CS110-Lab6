@@ -9,12 +9,10 @@ module.exports = router;
 router.get('/:room', async (req, res) => {
     const room = req.params.room;
     try {
-        const messages = await Messages.find({room});
+        const messages = await Messages.find({ room });
         for (let m of messages) {
             const sender = await User.findById(m.sender)
             m.sender = sender;
-            //let user = await User.findById(userId);
-            //let roomIndex = user.rooms.indexOf(roomID);
         }
         res.status(200).json(messages);
     } catch (error) {
@@ -24,19 +22,18 @@ router.get('/:room', async (req, res) => {
 });
 
 // send new message 
-router.post('/',  async (req, res)=>{
-    const {sender, room, message} = req.body;
-    //const sender = await User.findById(user);
-    const newMessage = new Messages ({
+router.post('/', async (req, res) => {
+    const { sender, room, message } = req.body;
+    const newMessage = new Messages({
         sender: sender.userID,
         room: room,
         message: message,
     })
-    try{
+    try {
         const dataSaved = await newMessage.save();
-        res.status(200).json({dataSaved, status: 200});
+        res.status(200).json({ dataSaved, status: 200 });
     }
-    catch (error){
+    catch (error) {
         console.log(error);
         res.send("ERROR!");
     }
@@ -44,16 +41,15 @@ router.post('/',  async (req, res)=>{
 
 // edit message 
 router.post('/edit', async (req, res) => {
-    const { newMsg, msgID} = req.body;
+    const { newMsg, msgID } = req.body;
     try {
-        console.log("post request!"); 
         const Msg = await Messages.findById(msgID);
         Msg.message = newMsg;
         await Msg.save();
-        console.log("saved message!"); 
-        res.status(200).json({Msg});
-    } catch(error) {
-        console.log(error); 
+        console.log("saved message!");
+        res.status(200).json({ Msg });
+    } catch (error) {
+        console.log(error);
         res.status(500).json("Error editing message");
     }
 });
@@ -62,16 +58,16 @@ router.post('/edit', async (req, res) => {
 router.get('/check/:room', async (req, res) => {
     const room = req.params.room;
     try {
-      const lastMessageCount = req.query.lastMessageCount;
-      const query = { room };
-      const messageCount = await Messages.countDocuments(query);
-  
-      const newMessageCount = messageCount - lastMessageCount;
-      const hasNewMessages = newMessageCount !== 0;
-  
-      res.status(200).json({ newMessages: hasNewMessages, messageCount });
+        const lastMessageCount = req.query.lastMessageCount;
+        const query = { room };
+        const messageCount = await Messages.countDocuments(query);
+
+        const newMessageCount = messageCount - lastMessageCount;
+        const hasNewMessages = newMessageCount !== 0;
+
+        res.status(200).json({ newMessages: hasNewMessages, messageCount });
     } catch (error) {
-      console.log(error);
-      res.status(500).send("Error checking for new messages");
+        console.log(error);
+        res.status(500).send("Error checking for new messages");
     }
 });

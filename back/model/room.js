@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const roomSchema = mongoose.Schema(
     {
         name: {
-        type: String,
-        required: true,
+            type: String,
+            required: true,
         },
         code: {
             type: Number,
@@ -17,7 +17,7 @@ const roomSchema = mongoose.Schema(
         creator: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
-        }, 
+        },
     },
     {
         timestamps: true,
