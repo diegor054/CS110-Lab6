@@ -40,6 +40,7 @@ class Auth extends react.Component{
                     } else {
                     this.props.setUser(data.user)
                     this.props.changeScreen("lobby");
+
                     }
                 }
                 else {
@@ -95,9 +96,9 @@ class Auth extends react.Component{
         })
         .then((data) => {
             if (data.msg === "logged in") {
+                this.props.setUser(data.user)
                 this.props.changeScreen("lobby");
-                this.props.setCreator(data.creator);
-                this.props.setUsername(data.user);
+                
             } else {
                 alert(data.msg);
             }
