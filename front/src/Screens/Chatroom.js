@@ -280,22 +280,27 @@ render() {
               <div style={{color: "black", margin:"10px"}}>
                         <span style={{fontWeight: "bold"}}> {message.sender.name}</span>
                         <span style={{color: "gray", fontSize:"14px"}}> @{message.sender.username}</span>
-                        <div style={{ overflowWrap: "break-word", wordBreak: "break-all" }}>{message.message}</div>
+                        {(this.state.editMsgBox === message._id) ? 
+                            <div style={{ overflowWrap: "break-word", wordBreak: "break-all" }}>
+                                <textarea rows="2" cols="30" 
+                                    defaultValue={message.message} 
+                                    type="text"
+                                      // value={this.state.message}
+                                      onChange={ (e) => { 
+                                        this.setState({ editMsg: e.target.value});
+                                        // console.log("editMsg value: ", this.state.editMsg); 
+                                      }}>
+                                </textarea>
+                            </div> :
+                            <div style={{ overflowWrap: "break-word", wordBreak: "break-all" }}>{message.message}</div>
+                        }
+                       
+                        
               </div>
               
               {(this.state.editMsgBox === message._id) ? 
               <div style={{ marginLeft: "auto" }}>
-              <textarea rows="2" cols="50" 
-              defaultValue={message.message} 
-              type="text"
-                // value={this.state.message}
-                onChange={ (e) => { 
-                  this.setState({ editMsg: e.target.value});
-                  // console.log("editMsg value: ", this.state.editMsg); 
-                }}>
-              </textarea> 
               <button className="edit-btn" onClick={() => this.handleEditMsg(index)}>submit</button>
-
               </div>: 
 
               <div style={{ marginLeft: "auto" }}>
