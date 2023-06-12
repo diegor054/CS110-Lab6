@@ -196,4 +196,13 @@ router.post('/editPFP', async (req, res) => {
   await user.save();
 });
 
+router.post('/editname', async (req, res) => {
+  // TODO: write necassary codes to join a new room
+  const { newName, username } = req.body;
+  console.log("My name change is:", newName)
+  const user = await User.findOne({ username });
+  user.name = newName;
+  await user.save();
+});
+
 // write the edit webpage function here (change profile?)

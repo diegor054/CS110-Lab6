@@ -57,6 +57,21 @@ class ScreenHandler extends react.Component{
         this.state.user.rooms = rs;
     }
 
+    setName = (n) => {
+        this.state.user.nameOfUser = n;
+        console.log("in sh setName", n)
+        fetch(server_url + '/api/auth/editname', {
+            method: "POST",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ newName: n, username: this.state.user.userName }),
+        })
+    }
+
     setPFP = (p) => {
         this.state.user.pfp = p;
         fetch(server_url + '/api/auth/editPFP', {
@@ -116,7 +131,7 @@ class ScreenHandler extends react.Component{
                 display = <Auth server_url = {server_url} changeScreen={this.changeScreen} setUser={this.setUser}/>;
             }
             else {
-                display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} user={this.state.user} setPFP={this.setPFP}/>;
+                display = <Lobby server_url = {server_url} changeScreen={this.changeScreen} setRoom={this.setRoom} user={this.state.user} setName={this.setName} setPFP={this.setPFP}/>;
             }
         }
         else if (this.state.screen === "chatroom"){
