@@ -224,6 +224,19 @@ filterMessages = () => {
 
 handleEditMsg = (index) => {
   console.log("post request for message", this.state.editMsgBox); 
+
+  const emitData = {
+    sender: {
+      name: this.props.user.nameOfUser,
+      username: this.props.user.userName,
+      pfp: this.props.user.pfp,
+      userID: this.props.user.userID,
+    },
+    room: this.props.room.name,
+    message: this.state.editMsg
+  }
+  this.socket.emit("edit message", emitData);
+
   let data = { "newMsg": this.state.editMsg, "msgID": this.state.editMsgBox}; 
   fetch(this.props.server_url + '/api/messages/edit', {
     method: 'POST',
@@ -304,7 +317,7 @@ render() {
         ))}
       </div>
       <div className="chat-div">
-        <input
+        <input className="chat-box"
           type="text"
           value={this.state.message}
           onChange={this.handleMessageChange}

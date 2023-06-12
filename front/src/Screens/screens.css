@@ -71,14 +71,19 @@
     position: fixed; 
     background-color: rgb(62, 62, 106); 
     width: 100%; 
-    padding: 10px 0px 10px 50px;
+    padding: 20px 100px 20px 100px;
     left: 0px;
 }
 
 .msg-container {
-    margin-bottom: 70px; 
+    margin-bottom: 150px; 
 }
 
 .edit-btn {
     float: right; 
+}
+
+.chat-box {
+    width: 70%; 
+    height: 30px; 
 }

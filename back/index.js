@@ -119,6 +119,10 @@ io.on('connection', (socket)=>{
     console.log("got the message", data)
     io.to(room).emit("chat message", data)
   })
+  socket.on("edit message", (data)=>{
+    console.log("got the message", data)
+    io.to(room).emit("edit message", data)
+  })
   socket.on("join", (data) => {
     socket.join(data.room);
     room = data.room;
