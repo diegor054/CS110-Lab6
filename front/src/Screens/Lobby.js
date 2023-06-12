@@ -1,7 +1,6 @@
 import react from "react";
 import { Button, TextField } from "@mui/material";
 import {io} from 'socket.io-client';
-import { useState } from "react";
 import DefaultPfp from "./../default-pfp.jpg"
 import './screens.css'; 
 
@@ -94,6 +93,16 @@ class Lobby extends react.Component{
                 rej(error);
             }; 
         });
+    };
+
+    handleNameSubmit = (event) => {
+        console.log(this.state.nameChange, "value of name change")
+        this.props.setName(this.state.nameChange);
+    }; 
+
+    handleNameChange = (event) => {
+        this.setState({nameChange:event.target.value}); 
+        console.log(this.state.nameChange)
     };
 
     
