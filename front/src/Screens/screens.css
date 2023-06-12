@@ -71,8 +71,12 @@
     position: fixed; 
     background-color: rgb(62, 62, 106); 
     width: 100%; 
-    padding: 20px 100px 20px 100px;
     left: 0px;
+    padding-top: 20px;
+    padding-bottom: 20px; 
+    padding-left: 20%;
+    padding-right: 20%; 
+    
 }
 
 .msg-container {
@@ -81,9 +85,14 @@
 
 .edit-btn {
     float: right; 
+    color: white; 
+    background: rgb(95, 95, 210); 
+    border: none; 
+    border-radius: 0px 0px 5px 5px;
 }
 
 .chat-box {
     width: 70%; 
     height: 30px; 
 }
+
