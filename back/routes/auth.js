@@ -5,6 +5,8 @@ const router = express.Router()
 const speakeasy = require("speakeasy");
 const nodemailer = require("nodemailer");
 const sgMail = require('@sendgrid/mail');
+const bcrypt = require('bcryptjs');
+
 require('dotenv').config()
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -30,25 +32,29 @@ router.post('/login', async (req, res) => {
 
     if (!user)
         return res.json({ msg: "Incorrect Email ", status: false });
-    else if (user.password !== password)
-        return res.json({ msg: "Incorrect Password", status: false });
     else {
-        let token = speakeasy.totp({
-            secret: user.secret,
-            encoding: "base32",
-        });
-        const msg = {
-            to: user.email,
-            from: "dboul001@ucr.edu",
-            subject: "CS110 Login Verification",
-            html: `<h1>Your 2FA token is: ${token}</h1>`
-        };
-        sgMail.send(msg);
-        session.user = user;
-        const userRooms = await Room.find({ users: user._id })
-        user.rooms = userRooms;
-        console.log(user, "in log in this is the user");
-        res.status(200).json({ msg: "logged in", tokenRequired: true, user: user });
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.json({ msg: "Incorrect Password", status: false });
+        }
+        else{
+            let token = speakeasy.totp({
+                secret: user.secret,
+                encoding: "base32",
+            });
+            const msg = {
+                to: user.email,
+                from: "dboul001@ucr.edu",
+                subject: "CS110 Login Verification",
+                html: `<h1>Your 2FA token is: ${token}</h1>`
+            };
+            sgMail.send(msg);
+            session.user = user;
+            const userRooms = await Room.find({ users: user._id })
+            user.rooms = userRooms;
+
+            res.status(200).json({ msg: "logged in", tokenRequired: true, user: user });
+        }   
     }
 });
 
@@ -63,10 +69,14 @@ router.post('/logout', async (req, res) => {
 router.post('/signup', async (req, res) => {
     const { email, password, name, username } = req.body;
     let secret = speakeasy.generateSecret({ length: 20 });
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const user = new User({
         email: email,
         username: username,
-        password: password,
+        password: hashedPassword,
         name: name,
         secret: secret.base32,
         pfp: null
@@ -88,15 +98,14 @@ router.post('/signup', async (req, res) => {
 // route to verify 2fa token:
 router.post('/verify', async (req, res) => {
     const { token } = req.body;
-    console.log("req.session.user:", req.session.user);
-    console.log("Entered Token:", token);
+
     if (!req.session.user || !req.session.user.email) {
         return res.json({ msg: "User not found", status: false });
     }
     const { email } = req.session.user;
-    console.log("Email from session:", email);
+
     const user = await User.findOne({ email });
-    console.log("User from database:", user);
+
     if (!user) {
         return res.json({ msg: "User not found", status: false });
     }
@@ -108,7 +117,7 @@ router.post('/verify', async (req, res) => {
         token: token,
         window: 2
     });
-    console.log("Token validation result:", tokenIsValid);
+
     if (tokenIsValid) {
         req.session.authenticated = true;
         req.session.userId = user._id;
@@ -136,79 +145,3 @@ router.post('/editname', async (req, res) => {
 });
 
 module.exports = router;
-
-// The commented out code below is auth.js without 2FA
-
-/*
-const express = require('express');
-const User = require('../model/user');
-const Room = require('../model/room');
-const router = express.Router()
-
-module.exports = router;
-
-router.post('/login', async (req, res) => {
-    const { session } = req;
-    const { username, password } = req.body;
-
-    // check if user in database
-    const user = await User.findOne({ username });
-
-    if (!user)
-        return res.json({ msg: "Incorrect Username ", status: false });
-    else if (user.password !== password)
-        return res.json({ msg: "Incorrect Password", status: false });
-    else {
-        session.authenticated = true;
-        session.userId = user._id;
-        req.user = user;
-        const userRooms = await Room.find({ users: user._id })
-        user.rooms = userRooms;
-        res.json({ msg: "logged in", user: user });
-    }
-});
-
-// Set up a route for the logout page
-router.post('/logout', async (req, res) => {
-    // Clear the session data and redirect to the home page
-    req.session.destroy();
-    res.send({ msg: "logged out", status: true })
-});
-
-// Set up a route for the signup page
-router.post('/signup', async (req, res) => {
-    const { username, password, name } = req.body;
-    const user = new User({
-        username: username,
-        password: password,
-        name: name,
-        pfp: null
-    })
-    if ((await User.findOne({ username })) != null) {
-        res.send(JSON.stringify("Username not available"));
-    } else {
-        try {
-            const dataSaved = await user.save();
-            res.status(200).json({ dataSaved, status: 200 });
-        }
-        catch (error) {
-            console.log(error);
-            res.send("ERROR!");
-        }
-    }
-})
-
-router.post('/editPFP', async (req, res) => {
-    const { newProfilePic, username } = req.body;
-    const user = await User.findOne({ username });
-    user.pfp = newProfilePic;
-    await user.save();
-});
-
-router.post('/editname', async (req, res) => {
-    const { newName, username } = req.body;
-    const user = await User.findOne({ username });
-    user.name = newName;
-    await user.save();
-});
-*/

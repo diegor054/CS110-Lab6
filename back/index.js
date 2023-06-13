@@ -10,7 +10,7 @@ const auth = require('./routes/auth');
 const rooms = require('./routes/rooms');
 const messages = require('./routes/messages');
 const User = require('./model/user');
-
+const bcrypt = require('bcryptjs');
 const app = express();
 const server = http.createServer(app);
 

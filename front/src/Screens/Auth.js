@@ -32,13 +32,10 @@ class Auth extends react.Component {
             }
             return res.json();
         }).then((data) => {
-            console.log(data);
             if (data.msg === "logged in") {
                 if (this.state.tokenRequired) {
-                    console.log(data.tokenRequired, "token in log in")
                     this.setState({ showForm: true, selectedForm: "code" });
                 } else {
-                    console.log(data.user, "in login")
                     this.setState({ showForm: false });
 
                 }
@@ -68,7 +65,6 @@ class Auth extends react.Component {
                     if (data.msg === undefined) {
                         alert("Not available.")
                     } else {
-                        console.log("failed")
                         alert(data.msg);
                     }
                 }
@@ -94,7 +90,6 @@ class Auth extends react.Component {
             return res.json();
         }).then((data) => {
             if (data.msg === "logged in") {
-                console.log(data.user, "in verify")
                 this.setState({ tokenRequired: false })
                 this.props.setUser(data.user)
                 this.props.changeScreen("lobby");
